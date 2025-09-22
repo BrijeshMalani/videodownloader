@@ -13,6 +13,8 @@ class DownloadScreen extends StatefulWidget {
 class _DownloadScreenState extends State<DownloadScreen> {
   List<AssetEntity> videos = [];
   bool loading = true;
+  String? errorMessage;
+  bool permissionDenied = false;
 
   @override
   void initState() {
@@ -21,39 +23,59 @@ class _DownloadScreenState extends State<DownloadScreen> {
   }
 
   Future<void> _checkPermissionAndLoad() async {
-    // Check permission
-    PermissionState ps = await PhotoManager.requestPermissionExtend();
+    try {
+      // Check permission
+      final PermissionState state =
+          await PhotoManager.requestPermissionExtend();
 
-    if (ps.isAuth) {
-      // Permission granted -> load videos
-      _loadVideos();
-    } else {
-      // Permission denied
-      setState(() => loading = false);
-      PhotoManager.openSetting(); // Open app settings for manual allow
+      if (state.isAuth || state.hasAccess) {
+        await _loadVideos();
+      } else {
+        setState(() {
+          loading = false;
+          permissionDenied = true;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        loading = false;
+        errorMessage = e.toString();
+      });
     }
   }
 
   Future<void> _loadVideos() async {
-    // Get video albums
-    List<AssetPathEntity> albums = await PhotoManager.getAssetPathList(
-      type: RequestType.video,
-    );
+    try {
+      // Prefer unified "All" album to avoid duplicates and ensure coverage
+      final List<AssetPathEntity> albums = await PhotoManager.getAssetPathList(
+        type: RequestType.video,
+        onlyAll: true,
+      );
 
-    List<AssetEntity> allVideos = [];
+      final List<AssetEntity> collected = [];
 
-    for (var album in albums) {
-      List<AssetEntity> albumVideos = await album.getAssetListPaged(
-        page: 0,
-        size: 100,
-      ); // First 100
-      allVideos.addAll(albumVideos);
+      if (albums.isNotEmpty) {
+        final AssetPathEntity all = albums.first;
+        // Page through first 200 items for now; adjust as needed
+        final List<AssetEntity> firstPage = await all.getAssetListPaged(
+          page: 0,
+          size: 200,
+        );
+        collected.addAll(firstPage);
+      }
+
+      setState(() {
+        videos = collected;
+        loading = false;
+        permissionDenied = false;
+        errorMessage = null;
+      });
+    } catch (e) {
+      setState(() {
+        loading = false;
+        errorMessage = e.toString();
+      });
     }
-
-    setState(() {
-      videos = allVideos;
-      loading = false;
-    });
   }
 
   @override
@@ -62,6 +84,32 @@ class _DownloadScreenState extends State<DownloadScreen> {
       appBar: AppBar(title: const Text("Gallery Videos")),
       body: loading
           ? const Center(child: CircularProgressIndicator())
+          : permissionDenied
+          ? Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text("Permission required to access videos"),
+                  const SizedBox(height: 12),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ElevatedButton(
+                        onPressed: _checkPermissionAndLoad,
+                        child: const Text("Retry"),
+                      ),
+                      const SizedBox(width: 12),
+                      OutlinedButton(
+                        onPressed: PhotoManager.openSetting,
+                        child: const Text("Open Settings"),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            )
+          : (errorMessage != null)
+          ? Center(child: Text("Error: $errorMessage"))
           : videos.isEmpty
           ? const Center(child: Text("No videos found 🎥"))
           : GridView.builder(

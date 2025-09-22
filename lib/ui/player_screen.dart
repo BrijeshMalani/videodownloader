@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
+import 'package:permission_handler/permission_handler.dart' as ph;
 
 class PlayerScreen extends StatefulWidget {
   const PlayerScreen({super.key});
@@ -19,6 +20,8 @@ class _PlayerScreenState extends State<PlayerScreen>
   );
   bool _loading = true;
   final List<AssetEntity> _audios = <AssetEntity>[];
+  bool _audioPermissionDenied = false;
+  String? _audioErrorMessage;
 
   @override
   void initState() {
@@ -26,33 +29,66 @@ class _PlayerScreenState extends State<PlayerScreen>
     _tabController.addListener(() {
       if (mounted) setState(() {});
     });
-    _loadAudios();
+    _ensureAndroidMediaPermissions().then((_) => _loadAudios());
+  }
+
+  Future<void> _ensureAndroidMediaPermissions() async {
+    try {
+      // Request granular media permissions (Android 13+) or no-op on lower versions
+      if (Platform.isAndroid) {
+        await [ph.Permission.videos, ph.Permission.audio].request();
+      }
+    } catch (_) {
+      // Ignore errors; PhotoManager will handle fallback permission flow
+    }
   }
 
   Future<void> _loadAudios() async {
-    final PermissionState ps = await PhotoManager.requestPermissionExtend();
-    if (!ps.isAuth) {
-      setState(() => _loading = false);
-      return;
-    }
+    try {
+      final PermissionState ps = await PhotoManager.requestPermissionExtend();
+      if (!(ps.isAuth || ps.hasAccess)) {
+        if (mounted) {
+          setState(() {
+            _loading = false;
+            _audioPermissionDenied = true;
+          });
+        }
+        return;
+      }
 
-    final List<AssetPathEntity> audioPaths =
-        await PhotoManager.getAssetPathList(
-          type: RequestType.audio,
-          onlyAll: false,
+      // Load from unified "All" audio album
+      final List<AssetPathEntity> audioAll =
+          await PhotoManager.getAssetPathList(
+            type: RequestType.audio,
+            onlyAll: true,
+          );
+      final List<AssetEntity> collected = <AssetEntity>[];
+      if (audioAll.isNotEmpty) {
+        final AssetPathEntity all = audioAll.first;
+        final List<AssetEntity> first = await all.getAssetListPaged(
+          page: 0,
+          size: 1000,
         );
-    final List<AssetEntity> audios = <AssetEntity>[];
-    for (final AssetPathEntity p in audioPaths) {
-      audios.addAll(await p.getAssetListPaged(page: 0, size: 1000));
-    }
+        collected.addAll(first);
+      }
 
-    if (mounted) {
-      setState(() {
-        _audios
-          ..clear()
-          ..addAll(audios);
-        _loading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _audios
+            ..clear()
+            ..addAll(collected);
+          _loading = false;
+          _audioPermissionDenied = false;
+          _audioErrorMessage = null;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _loading = false;
+          _audioErrorMessage = e.toString();
+        });
+      }
     }
   }
 
@@ -93,6 +129,32 @@ class _PlayerScreenState extends State<PlayerScreen>
           VideoScreen(),
           _loading
               ? const Center(child: CircularProgressIndicator())
+              : _audioPermissionDenied
+              ? Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text('Permission required to access music'),
+                      const SizedBox(height: 12),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ElevatedButton(
+                            onPressed: _loadAudios,
+                            child: const Text('Retry'),
+                          ),
+                          const SizedBox(width: 12),
+                          OutlinedButton(
+                            onPressed: PhotoManager.openSetting,
+                            child: const Text('Open Settings'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                )
+              : (_audioErrorMessage != null)
+              ? Center(child: Text('Error: ' + (_audioErrorMessage ?? '')))
               : _AudioList(audios: _audios),
         ],
       ),
@@ -166,90 +228,130 @@ class VideoScreen extends StatefulWidget {
 }
 
 class _VideoScreenState extends State<VideoScreen> {
-  bool _loading = true;
-  bool _folderView = false; // list vs folder
-  final List<AssetEntity> _videos = <AssetEntity>[];
+  List<AssetEntity> videos = [];
+  bool loading = true;
+  String? errorMessage;
+  bool permissionDenied = false;
 
   @override
   void initState() {
     super.initState();
-    _loadMedia();
+    _checkPermissionAndLoad();
   }
 
-  Future<void> _loadMedia() async {
-    final PermissionState ps = await PhotoManager.requestPermissionExtend();
-    if (!ps.isAuth) {
-      setState(() => _loading = false);
-      return;
-    }
+  Future<void> _checkPermissionAndLoad() async {
+    try {
+      // Check permission
+      final PermissionState state =
+          await PhotoManager.requestPermissionExtend();
 
-    final List<AssetPathEntity> videoPaths =
-        await PhotoManager.getAssetPathList(
-          type: RequestType.video,
-          onlyAll: false,
-        );
-    final List<AssetPathEntity> audioPaths =
-        await PhotoManager.getAssetPathList(
-          type: RequestType.audio,
-          onlyAll: false,
-        );
-
-    final List<AssetEntity> videos = <AssetEntity>[];
-    for (final AssetPathEntity p in videoPaths) {
-      videos.addAll(await p.getAssetListPaged(page: 0, size: 1000));
-    }
-    final List<AssetEntity> audios = <AssetEntity>[];
-    for (final AssetPathEntity p in audioPaths) {
-      audios.addAll(await p.getAssetListPaged(page: 0, size: 1000));
-    }
-
-    if (mounted) {
+      if (state.isAuth || state.hasAccess) {
+        await _loadVideos();
+      } else {
+        setState(() {
+          loading = false;
+          permissionDenied = true;
+        });
+      }
+    } catch (e) {
       setState(() {
-        _videos
-          ..clear()
-          ..addAll(videos);
-        _loading = false;
+        loading = false;
+        errorMessage = e.toString();
+      });
+    }
+  }
+
+  Future<void> _loadVideos() async {
+    try {
+      // Prefer unified "All" album to avoid duplicates and ensure coverage
+      final List<AssetPathEntity> albums = await PhotoManager.getAssetPathList(
+        type: RequestType.video,
+        onlyAll: true,
+      );
+
+      final List<AssetEntity> collected = [];
+
+      if (albums.isNotEmpty) {
+        final AssetPathEntity all = albums.first;
+        // Page through first 200 items for now; adjust as needed
+        final List<AssetEntity> firstPage = await all.getAssetListPaged(
+          page: 0,
+          size: 200,
+        );
+        collected.addAll(firstPage);
+      }
+
+      setState(() {
+        videos = collected;
+        loading = false;
+        permissionDenied = false;
+        errorMessage = null;
+      });
+    } catch (e) {
+      setState(() {
+        loading = false;
+        errorMessage = e.toString();
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(height: 10),
-        Row(
-          children: [
-            const Spacer(),
-            PopupMenuButton<String>(
-              child: Row(
-                children: const [
-                  Icon(Icons.sort, color: Colors.black87),
-                  SizedBox(width: 8),
-                  Text(
-                    'Sort By',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+    return Scaffold(
+      appBar: AppBar(title: const Text("Gallery Videos")),
+      body: loading
+          ? const Center(child: CircularProgressIndicator())
+          : permissionDenied
+          ? Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text("Permission required to access videos"),
+                  const SizedBox(height: 12),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ElevatedButton(
+                        onPressed: _checkPermissionAndLoad,
+                        child: const Text("Retry"),
+                      ),
+                      const SizedBox(width: 12),
+                      OutlinedButton(
+                        onPressed: PhotoManager.openSetting,
+                        child: const Text("Open Settings"),
+                      ),
+                    ],
                   ),
-                  SizedBox(width: 16),
                 ],
               ),
-              onSelected: (String value) {
-                setState(() => _folderView = value == 'Folder');
+            )
+          : (errorMessage != null)
+          ? Center(child: Text("Error: $errorMessage"))
+          : videos.isEmpty
+          ? const Center(child: Text("No videos found 🎥"))
+          : GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 1,
+                crossAxisSpacing: 4,
+                mainAxisSpacing: 4,
+              ),
+              itemCount: videos.length,
+              itemBuilder: (context, index) {
+                return FutureBuilder<Uint8List?>(
+                  future: videos[index].thumbnailDataWithSize(
+                    const ThumbnailSize.square(200),
+                  ),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done &&
+                        snapshot.hasData &&
+                        snapshot.data != null) {
+                      return Image.memory(snapshot.data!, fit: BoxFit.cover);
+                    }
+                    return Container(color: Colors.grey[300]);
+                  },
+                );
               },
-              itemBuilder: (BuildContext context) => const [
-                PopupMenuItem<String>(value: 'List', child: Text('List')),
-                PopupMenuItem<String>(value: 'Folder', child: Text('Folder')),
-              ],
             ),
-          ],
-        ),
-        SizedBox(height: 10),
-        _loading
-            ? const Center(child: CircularProgressIndicator())
-            : (_folderView
-                  ? _VideoFolders(videos: _videos)
-                  : _VideoList(videos: _videos)),
-      ],
     );
   }
 }

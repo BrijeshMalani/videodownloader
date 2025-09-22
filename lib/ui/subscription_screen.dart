@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:videodownloader/ui/home_screen.dart';
 
 class SubscriptionScreen extends StatelessWidget {
   const SubscriptionScreen({super.key});
@@ -16,9 +17,9 @@ class SubscriptionScreen extends StatelessWidget {
               children: [
                 IconButton(
                   onPressed: () {
-                    Navigator.of(
-                      context,
-                    ).pushNamedAndRemoveUntil('/home', (route) => false);
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => HomeScreen()),
+                    );
                   },
                   icon: Icon(Icons.close),
                   iconSize: 38,

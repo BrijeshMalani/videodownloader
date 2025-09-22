@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:videodownloader/ui/url_download_screen.dart';
+import 'package:videodownloader/ui/webview_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -190,7 +192,56 @@ class _BrowserScreenState extends State<BrowserScreen> {
                               itemCount: items.length,
                               itemBuilder: (BuildContext context, int index) {
                                 final _QuickLink link = items[index];
-                                return _QuickTile(link: link);
+                                return _QuickTile(
+                                  link: link,
+                                  onTap: () {
+                                    final String l = link.label.toLowerCase();
+                                    if (l == 'facebook' ||
+                                        l == 'instagram' ||
+                                        l == 'tiktok' ||
+                                        l == 'twitter' ||
+                                        l == 'url downloader' ||
+                                        l == 'dp saver') {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (_) =>
+                                              UrlDownloadScreen(
+                                                platformLabel: link.label,
+                                                leadingIcon: link.fallbackIcon,
+                                                brandColor: _brandColorFor(l),
+                                              ),
+                                        ),
+                                      );
+                                    } else if (l == 'google' ||
+                                        l == 'vimeo' ||
+                                        l == '9gag' ||
+                                        l == 'imdb' ||
+                                        l == 'share chat' ||
+                                        l == 'ted talk' ||
+                                        l == 'linkedin' ||
+                                        l == 'pinterest') {
+                                      final Map<String, String> urls = {
+                                        'google': 'https://www.google.com',
+                                        'vimeo': 'https://vimeo.com',
+                                        '9gag': 'https://9gag.com',
+                                        'imdb': 'https://www.imdb.com',
+                                        'share chat': 'https://sharechat.com',
+                                        'ted talk': 'https://www.ted.com/talks',
+                                        'linkedin': 'https://www.linkedin.com',
+                                        'pinterest':
+                                            'https://www.pinterest.com',
+                                      };
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (_) => WebViewScreen(
+                                            url: urls[l]!,
+                                            title: link.label,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                );
                               },
                             );
                           },
@@ -268,6 +319,24 @@ class _BrowserScreenState extends State<BrowserScreen> {
     }
 
     // TODO: Navigate to your Status Saver feature screen
+  }
+}
+
+Color _brandColorFor(String key) {
+  switch (key) {
+    case 'facebook':
+      return const Color(0xFF1877F2);
+    case 'instagram':
+      return const Color(0xFFE1306C);
+    case 'tiktok':
+      return const Color(0xFF000000);
+    case 'twitter':
+      return const Color(0xFF1DA1F2);
+    case 'dp saver':
+    case 'url downloader':
+      return Colors.blueGrey;
+    default:
+      return Colors.redAccent;
   }
 }
 
@@ -471,49 +540,54 @@ class _SearchBar extends StatelessWidget {
 }
 
 class _QuickTile extends StatelessWidget {
-  const _QuickTile({required this.link});
+  const _QuickTile({required this.link, this.onTap});
 
   final _QuickLink link;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: 58,
-          height: 58,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(14),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 6,
-                offset: Offset(0, 2),
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(14),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 58,
+            height: 58,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(14),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 6,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(14),
+              child: Image.asset(
+                link.asset,
+                fit: BoxFit.cover,
+                errorBuilder: (BuildContext _, Object __, StackTrace? ___) {
+                  return Icon(link.fallbackIcon, color: Colors.black54);
+                },
               ),
-            ],
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(14),
-            child: Image.asset(
-              link.asset,
-              fit: BoxFit.cover,
-              errorBuilder: (BuildContext _, Object __, StackTrace? ___) {
-                return Icon(link.fallbackIcon, color: Colors.black54);
-              },
             ),
           ),
-        ),
-        const SizedBox(height: 6),
-        Text(
-          link.label,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: theme.textTheme.bodySmall?.copyWith(color: Colors.black54),
-        ),
-      ],
+          const SizedBox(height: 6),
+          Text(
+            link.label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: theme.textTheme.bodySmall?.copyWith(color: Colors.black54),
+          ),
+        ],
+      ),
     );
   }
 }
