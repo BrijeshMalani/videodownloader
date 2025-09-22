@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:videodownloader/ui/browser_screen.dart';
+import 'package:videodownloader/ui/player_screen.dart';
+
+import 'download_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,13 +17,22 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: _index,
-        children: const [
-          _DummyPage(label: 'Browse'),
-          _DummyPage(label: 'Downloads'),
-          _DummyPage(label: 'Player'),
-        ],
+      body: SafeArea(
+        child: Column(
+          children: [
+            _Header(),
+            Expanded(
+              child: IndexedStack(
+                index: _index,
+                children: const [
+                  BrowserScreen(),
+                  DownloadScreen(),
+                  PlayerScreen(),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: _BottomBar(
         index: _index,
@@ -135,8 +148,101 @@ class _BottomItem extends StatelessWidget {
   }
 }
 
+class _Header extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Row(
+        children: [
+          const Icon(
+            Icons.file_download_outlined,
+            color: Colors.redAccent,
+            size: 26,
+          ),
+          const SizedBox(width: 8),
+          const Text(
+            'Downloader',
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
+          ),
+          const Spacer(),
+          _BadgeIcon(icon: Icons.military_tech_outlined, badgeText: '1'),
+          const SizedBox(width: 10),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 6,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            padding: const EdgeInsets.all(8),
+            child: const Icon(Icons.settings_outlined, color: Colors.black87),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _BadgeIcon extends StatelessWidget {
+  const _BadgeIcon({required this.icon, this.badgeText});
+
+  final IconData icon;
+  final String? badgeText;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 6,
+                offset: Offset(0, 2),
+              ),
+            ],
+          ),
+          padding: const EdgeInsets.all(8),
+          child: Icon(icon, color: Colors.black87),
+        ),
+        if (badgeText != null)
+          Positioned(
+            top: -6,
+            right: -6,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(
+                badgeText!,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
 class _DummyPage extends StatelessWidget {
   const _DummyPage({required this.label});
+
   final String label;
 
   @override
