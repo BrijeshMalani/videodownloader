@@ -3,6 +3,8 @@ import 'dart:math' as math;
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
+import 'package:videodownloader/ui/video_player_page.dart';
+import 'package:videodownloader/ui/audio_player_page.dart';
 import 'package:permission_handler/permission_handler.dart' as ph;
 
 class PlayerScreen extends StatefulWidget {
@@ -298,7 +300,6 @@ class _VideoScreenState extends State<VideoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Gallery Videos")),
       body: loading
           ? const Center(child: CircularProgressIndicator())
           : permissionDenied
@@ -329,29 +330,7 @@ class _VideoScreenState extends State<VideoScreen> {
           ? Center(child: Text("Error: $errorMessage"))
           : videos.isEmpty
           ? const Center(child: Text("No videos found 🎥"))
-          : GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 1,
-                crossAxisSpacing: 4,
-                mainAxisSpacing: 4,
-              ),
-              itemCount: videos.length,
-              itemBuilder: (context, index) {
-                return FutureBuilder<Uint8List?>(
-                  future: videos[index].thumbnailDataWithSize(
-                    const ThumbnailSize.square(200),
-                  ),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done &&
-                        snapshot.hasData &&
-                        snapshot.data != null) {
-                      return Image.memory(snapshot.data!, fit: BoxFit.cover);
-                    }
-                    return Container(color: Colors.grey[300]);
-                  },
-                );
-              },
-            ),
+          : _VideoList(videos: videos),
     );
   }
 }
@@ -383,67 +362,118 @@ class _VideoTile extends StatelessWidget {
     return FutureBuilder<Uint8List?>(
       future: video.thumbnailDataWithSize(const ThumbnailSize(200, 200)),
       builder: (BuildContext context, AsyncSnapshot<Uint8List?> snapshot) {
-        return Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(18),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 8,
-                offset: Offset(0, 2),
-              ),
-            ],
-          ),
-          padding: const EdgeInsets.all(10),
-          child: Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: snapshot.data != null
-                    ? Image.memory(
-                        snapshot.data!,
-                        width: 120,
-                        height: 70,
-                        fit: BoxFit.cover,
-                      )
-                    : Container(width: 120, height: 70, color: Colors.black12),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+        return InkWell(
+          onTap: () async {
+            final File? f = await video.file;
+            if (f != null && await f.exists()) {
+              // ignore: use_build_context_synchronously
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => VideoPlayerPage(file: f)),
+              );
+            }
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(18),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 8,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            padding: const EdgeInsets.all(10),
+            child: Stack(
+              children: [
+                Row(
                   children: [
-                    Text(
-                      video.title ?? 'Video',
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontWeight: FontWeight.w700),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: snapshot.data != null
+                          ? Image.memory(
+                              snapshot.data!,
+                              width: 110,
+                              height: 70,
+                              fit: BoxFit.cover,
+                            )
+                          : Container(
+                              width: 110,
+                              height: 70,
+                              color: Colors.black12,
+                            ),
                     ),
-                    const SizedBox(height: 4),
-                    FutureBuilder<File?>(
-                      future: video.file,
-                      builder:
-                          (BuildContext context, AsyncSnapshot<File?> snap) {
-                            final String sizeLabel =
-                                (snap.hasData && snap.data != null)
-                                ? _fileSize(snap.data!.lengthSync())
-                                : '';
-                            return Text(
-                              sizeLabel,
-                              style: const TextStyle(color: Colors.black45),
-                            );
-                          },
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            video.title ?? 'Video',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(fontWeight: FontWeight.w700),
+                          ),
+                          const SizedBox(height: 4),
+                          FutureBuilder<File?>(
+                            future: video.file,
+                            builder:
+                                (
+                                  BuildContext context,
+                                  AsyncSnapshot<File?> snap,
+                                ) {
+                                  final String sizeLabel =
+                                      (snap.hasData && snap.data != null)
+                                      ? _fileSize(snap.data!.lengthSync())
+                                      : '';
+                                  return Text(
+                                    sizeLabel,
+                                    style: const TextStyle(
+                                      color: Colors.black45,
+                                      fontSize: 12,
+                                    ),
+                                  );
+                                },
+                          ),
+                        ],
+                      ),
                     ),
+                    const Icon(Icons.more_vert),
                   ],
                 ),
-              ),
-              const Icon(Icons.more_vert),
-            ],
+                Positioned(
+                  left: 10,
+                  bottom: 10,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 2,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.75),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Text(
+                      _duration(video.duration),
+                      style: const TextStyle(color: Colors.white, fontSize: 12),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
     );
+  }
+
+  String _duration(int seconds) {
+    final int m = seconds ~/ 60;
+    final int s = seconds % 60;
+    return (m.toString().padLeft(2, '0')) +
+        ':' +
+        (s.toString().padLeft(2, '0'));
   }
 
   String _fileSize(int bytes) {
@@ -559,51 +589,62 @@ class _AudioList extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       itemBuilder: (BuildContext context, int index) {
         final AssetEntity a = audios[index];
-        return Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(18),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 8,
-                offset: Offset(0, 2),
-              ),
-            ],
-          ),
-          padding: const EdgeInsets.all(10),
-          child: Row(
-            children: [
-              Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
+        return InkWell(
+          onTap: () async {
+            final File? f = await a.file;
+            if (f != null && await f.exists()) {
+              // ignore: use_build_context_synchronously
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => AudioPlayerPage(file: f)),
+              );
+            }
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(18),
+              boxShadow: const [
+                BoxShadow(
                   color: Colors.black12,
-                  borderRadius: BorderRadius.circular(12),
+                  blurRadius: 8,
+                  offset: Offset(0, 2),
                 ),
-                child: const Icon(Icons.music_note, color: Colors.black45),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      a.title ?? 'Audio',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontWeight: FontWeight.w700),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      _duration(a.duration),
-                      style: const TextStyle(color: Colors.black45),
-                    ),
-                  ],
+              ],
+            ),
+            padding: const EdgeInsets.all(10),
+            child: Row(
+              children: [
+                Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: Colors.black12,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(Icons.music_note, color: Colors.black45),
                 ),
-              ),
-              const Icon(Icons.more_vert),
-            ],
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        a.title ?? 'Audio',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontWeight: FontWeight.w700),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        _duration(a.duration),
+                        style: const TextStyle(color: Colors.black45),
+                      ),
+                    ],
+                  ),
+                ),
+                const Icon(Icons.more_vert),
+              ],
+            ),
           ),
         );
       },
