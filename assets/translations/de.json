@@ -1,0 +1,36 @@
+{
+  "common": {"yes": "Ja", "no": "Nein", "continue": "Weiter", "next": "Weiter", "skip": "Überspringen"},
+  "language": {"choose": "Sprache wählen"},
+  "settings": {
+    "title": "Einstellungen",
+    "changeLanguage": "Sprache ändern",
+    "howTo": "Wie herunterladen?",
+    "feedback": "App-Feedback",
+    "rateUs": "Bewerte uns",
+    "shareApp": "App teilen",
+    "privacy": "Datenschutzrichtlinie",
+    "terms": "Allgemeine Geschäftsbedingungen",
+    "licence": "App-Lizenz"
+  },
+  "tabs": {"browse": "Durchsuchen", "downloads": "Downloads", "player": "Player"},
+  "header": {"downloader": "Downloader"},
+  "exit": {"title": "App beenden", "message": "Möchtest du wirklich beenden?"},
+  "rate": {"title": "Bewerte die Video Downloader App", "button": "Bewerte uns"},
+  "status": {"title": "Status-Speicher", "subtitle": "Speichere Status automatisch!"},
+  "search": {"hint": "Suche oder URL eingeben"},
+  "intro": {
+    "p1": {"title": "Downloads mit einem Tipp", "subtitle": "Speichere Videos schnell mit privaten und sicheren Downloads."},
+    "p2": {"title": "4X schnellere Geschwindigkeit", "subtitle": "Lade mehrere Videos 4X schneller ohne Unterbrechungen herunter."},
+    "p3": {"title": "Privater Proxyserver", "subtitle": "Greife sicher von überall zu und lade herunter."},
+    "p4": {"title": "Ultra HD Player", "subtitle": "Genieße flüssige 4K-Wiedergabe."},
+    "p5": {"title": "Schließe dich 10+ Mio. Nutzern an", "subtitle": "Schnelle, zuverlässige Downloads, die Millionen lieben."}
+  },
+  "howto": {
+    "p1": {"title": "Zur Website gehen"},
+    "p2": {"title": "Video abspielen"},
+    "p3": {"title": "Auf die Schaltfläche Download tippen"},
+    "p4": {"title": ""},
+    "gotit": "Verstanden"
+  }
+}
+

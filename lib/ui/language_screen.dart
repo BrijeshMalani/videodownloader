@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:videodownloader/Utils/common.dart';
+
+import 'home_screen.dart';
 
 class LanguageScreen extends StatefulWidget {
   const LanguageScreen({super.key});
@@ -28,13 +32,27 @@ class _LanguageScreenState extends State<LanguageScreen> {
     final ThemeData theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Choose Language'),
+        title: const Text('language.choose').tr(),
         centerTitle: false,
         actions: [
           IconButton(
             icon: const Icon(Icons.check, color: Colors.redAccent),
-            onPressed: () {
-              Navigator.of(context).pushNamed('/subscribe');
+            onPressed: () async {
+              // Apply selected locale to entire app
+              final String code = _selectedCode ?? 'en';
+              await context.setLocale(Locale(code));
+
+              if (Common.lanopen == "1") {
+                if (context.mounted)
+                  Navigator.of(context).pushNamed('/subscribe');
+              } else {
+                if (context.mounted)
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomeScreen()),
+                        (Route<dynamic> route) => false,
+                  );
+              }
             },
           ),
         ],

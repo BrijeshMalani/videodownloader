@@ -56,7 +56,6 @@ class SubscriptionScreen extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  // TODO: integrate real purchase flow
                   Navigator.of(context).maybePop();
                 },
                 child: Text(

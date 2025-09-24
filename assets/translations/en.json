@@ -1,0 +1,37 @@
+{
+  "common": {"yes": "Yes", "no": "No", "continue": "Continue"},
+  "language": {"choose": "Choose Language"},
+  "settings": {
+    "title": "Settings",
+    "changeLanguage": "Change Language",
+    "howTo": "How to Download ?",
+    "feedback": "App Feedback",
+    "rateUs": "Rate Us",
+    "shareApp": "Share App",
+    "privacy": "Privacy Policy",
+    "terms": "Terms & Condition",
+    "licence": "App Licence"
+  },
+  "tabs": {"browse": "Browse", "downloads": "Downloads", "player": "Player"},
+  "header": {"downloader": "Downloader"},
+  "exit": {"title": "Exit App", "message": "Do you really want to exit?"},
+  "rate": {"title": "Rate Video Downloader App", "button": "Rate Us"},
+  "status": {"title": "Status Saver", "subtitle": "Save statuses automatically! Enjoy saving moments."},
+  "search": {"hint": "Search or type URL"},
+  "common": {"yes": "Yes", "no": "No", "continue": "Continue", "next": "Next", "skip": "Skip"},
+  "intro": {
+    "p1": {"title": "One-Tap Downloads", "subtitle": "Save videos quickly with secure, private downloads in just a few steps."},
+    "p2": {"title": "4X Faster Speed", "subtitle": "Download multiple videos at 4X speed with no interruptions or limits."},
+    "p3": {"title": "Private Proxy Server", "subtitle": "Access and download videos securely from anywhere with a fast proxy."},
+    "p4": {"title": "Ultra HD Player", "subtitle": "Enjoy stunning 4K playback with our smooth and powerful media player."},
+    "p5": {"title": "Join 10 Million+\nHappy Users", "subtitle": "Fast, reliable and easy video downloads loved by millions."}
+  },
+  "howto": {
+    "p1": {"title": "Go To Website"},
+    "p2": {"title": "Play The Video"},
+    "p3": {"title": "Click The Download Button"},
+    "p4": {"title": ""},
+    "gotit": "Got it"
+  }
+}
+

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:videodownloader/Utils/common.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({super.key});
@@ -14,37 +16,28 @@ class _IntroScreenState extends State<IntroScreen> {
   final List<_IntroPageData> _pages = const [
     _IntroPageData(
       imageAsset: 'assets/images/intro1.png',
-      title: 'One-Tap Downloads',
-      subtitle:
-          'Save videos quickly with secure, private downloads in just a few steps.',
-      ctaLabel: 'Next',
+      titleKey: 'intro.p1.title',
+      subtitleKey: 'intro.p1.subtitle',
     ),
     _IntroPageData(
       imageAsset: 'assets/images/intro2.png',
-      title: '4X Faster Speed',
-      subtitle:
-          'Download multiple videos at 4X speed with no interruptions or limits.',
-      ctaLabel: 'Next',
+      titleKey: 'intro.p2.title',
+      subtitleKey: 'intro.p2.subtitle',
     ),
     _IntroPageData(
       imageAsset: 'assets/images/intro3.png',
-      title: 'Private Proxy Server',
-      subtitle:
-          'Access and download videos securely from anywhere with a fast proxy.',
-      ctaLabel: 'Next',
+      titleKey: 'intro.p3.title',
+      subtitleKey: 'intro.p3.subtitle',
     ),
     _IntroPageData(
       imageAsset: 'assets/images/intro4.png',
-      title: 'Ultra HD Player',
-      subtitle:
-          'Enjoy stunning 4K playback with our smooth and powerful media player.',
-      ctaLabel: 'Next',
+      titleKey: 'intro.p4.title',
+      subtitleKey: 'intro.p4.subtitle',
     ),
     _IntroPageData(
       imageAsset: 'assets/images/intro5.png',
-      title: 'Join 10 Million+\nHappy Users',
-      subtitle: 'Fast, reliable and easy video downloads loved by millions.',
-      ctaLabel: 'Continue',
+      titleKey: 'intro.p5.title',
+      subtitleKey: 'intro.p5.subtitle',
     ),
   ];
 
@@ -65,6 +58,7 @@ class _IntroScreenState extends State<IntroScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Common.lanopen = "1";
     final ThemeData theme = Theme.of(context);
     return Scaffold(
       backgroundColor: Colors.white,
@@ -83,8 +77,8 @@ class _IntroScreenState extends State<IntroScreen> {
                   final _IntroPageData data = _pages[index];
                   return _IntroContent(
                     imageAsset: data.imageAsset,
-                    title: data.title,
-                    subtitle: data.subtitle,
+                    titleKey: data.titleKey,
+                    subtitleKey: data.subtitleKey,
                   );
                 },
               ),
@@ -118,8 +112,8 @@ class _IntroScreenState extends State<IntroScreen> {
                       onPressed: _goToNextPage,
                       child: Text(
                         _currentPageIndex == _pages.length - 1
-                            ? 'Continue'
-                            : 'Next',
+                            ? tr('common.continue')
+                            : tr('common.next'),
                         style: theme.textTheme.titleMedium?.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.w600,
@@ -142,13 +136,13 @@ class _IntroScreenState extends State<IntroScreen> {
 class _IntroContent extends StatelessWidget {
   const _IntroContent({
     required this.imageAsset,
-    required this.title,
-    required this.subtitle,
+    required this.titleKey,
+    required this.subtitleKey,
   });
 
   final String imageAsset;
-  final String title;
-  final String subtitle;
+  final String titleKey;
+  final String subtitleKey;
 
   @override
   Widget build(BuildContext context) {
@@ -170,7 +164,7 @@ class _IntroContent extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Text(
-            title,
+            tr(titleKey),
             textAlign: TextAlign.left,
             style: theme.textTheme.headlineSmall?.copyWith(
               color: Colors.redAccent,
@@ -183,7 +177,7 @@ class _IntroContent extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Text(
-            subtitle,
+            tr(subtitleKey),
             style: theme.textTheme.bodyMedium?.copyWith(
               color: Colors.grey,
               height: 1.4,
@@ -235,13 +229,11 @@ class _DotsIndicator extends StatelessWidget {
 class _IntroPageData {
   const _IntroPageData({
     required this.imageAsset,
-    required this.title,
-    required this.subtitle,
-    required this.ctaLabel,
+    required this.titleKey,
+    required this.subtitleKey,
   });
 
   final String imageAsset;
-  final String title;
-  final String subtitle;
-  final String ctaLabel;
+  final String titleKey;
+  final String subtitleKey;
 }

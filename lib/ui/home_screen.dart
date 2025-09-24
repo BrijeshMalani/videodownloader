@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:videodownloader/ui/browser_screen.dart';
+import 'package:videodownloader/ui/settings_screen.dart';
 import 'package:videodownloader/ui/player_screen.dart';
 import 'package:videodownloader/ui/subscription_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'download_screen.dart';
 
@@ -22,16 +24,16 @@ class _HomeScreenState extends State<HomeScreen> {
         return await showDialog(
               context: context,
               builder: (context) => AlertDialog(
-                title: const Text("Exit App"),
-                content: const Text("Do you really want to exit?"),
+                title: Text('exit.title'.tr()),
+                content: Text('exit.message'.tr()),
                 actions: [
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(false),
-                    child: const Text("No"),
+                    child: Text('common.no'.tr()),
                   ),
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(true),
-                    child: const Text("Yes"),
+                    child: Text('common.yes'.tr()),
                   ),
                 ],
               ),
@@ -91,7 +93,7 @@ class _BottomBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _BottomItem(
-            label: 'Browse',
+            label: 'tabs.browse'.tr(),
             icon: Icons.public,
             selected: index == 0,
             onTap: () => onChanged(0),
@@ -99,7 +101,7 @@ class _BottomBar extends StatelessWidget {
             iconColor: iconColor,
           ),
           _BottomItem(
-            label: 'Downloads',
+            label: 'tabs.downloads'.tr(),
             icon: Icons.download,
             selected: index == 1,
             onTap: () => onChanged(1),
@@ -107,7 +109,7 @@ class _BottomBar extends StatelessWidget {
             iconColor: iconColor,
           ),
           _BottomItem(
-            label: 'Player',
+            label: 'tabs.player'.tr(),
             icon: Icons.video_library_outlined,
             selected: index == 2,
             onTap: () => onChanged(2),
@@ -184,9 +186,9 @@ class _Header extends StatelessWidget {
             size: 26,
           ),
           const SizedBox(width: 8),
-          const Text(
-            'Downloader',
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
+          Text(
+            'header.downloader'.tr(),
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
           ),
           const Spacer(),
           InkWell(
@@ -198,20 +200,27 @@ class _Header extends StatelessWidget {
             child: _BadgeIcon(icon: Icons.military_tech_outlined),
           ),
           const SizedBox(width: 10),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: const [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 6,
-                  offset: Offset(0, 2),
-                ),
-              ],
+          InkWell(
+            onTap: () {
+              Navigator.of(
+                context,
+              ).push(MaterialPageRoute(builder: (_) => const SettingsScreen()));
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 6,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              padding: const EdgeInsets.all(8),
+              child: const Icon(Icons.settings_outlined, color: Colors.black87),
             ),
-            padding: const EdgeInsets.all(8),
-            child: const Icon(Icons.settings_outlined, color: Colors.black87),
           ),
         ],
       ),

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:videodownloader/ui/url_download_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:videodownloader/ui/webview_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -23,58 +24,46 @@ class _BrowserScreenState extends State<BrowserScreen> {
     [
       _QuickLink(
         'URL Downloader',
-        'assets/images/app_url.png',
+        'assets/icon/url.png',
         Icons.add_circle_outline,
       ),
-      _QuickLink('Google', 'assets/images/app_google.png', Icons.g_mobiledata),
-      _QuickLink('Facebook', 'assets/images/app_facebook.png', Icons.facebook),
+      _QuickLink('Google', 'assets/icon/google.png', Icons.g_mobiledata),
+      _QuickLink('Facebook', 'assets/icon/facebook.png', Icons.facebook),
       _QuickLink(
         'Instagram',
-        'assets/images/app_instagram.png',
+        'assets/icon/instagram.png',
         Icons.camera_alt_outlined,
       ),
-      _QuickLink('TikTok', 'assets/images/app_tiktok.png', Icons.music_note),
+      _QuickLink('TikTok', 'assets/icon/tiktok.png', Icons.music_note),
       _QuickLink(
         'Status',
-        'assets/images/app_status.png',
+        'assets/icon/whatsapp.png',
         Icons.download_done_outlined,
       ),
-      _QuickLink(
-        'Twitter',
-        'assets/images/app_twitter.png',
-        Icons.alternate_email,
-      ),
-      _QuickLink(
-        'Vimeo',
-        'assets/images/app_vimeo.png',
-        Icons.play_circle_outline,
-      ),
+      _QuickLink('Twitter', 'assets/icon/twitter.png', Icons.alternate_email),
+      _QuickLink('Vimeo', 'assets/icon/vimeo.png', Icons.play_circle_outline),
     ],
     [
-      _QuickLink('9GAG', 'assets/images/app_9gag.png', Icons.tag_faces),
-      _QuickLink('IMDb', 'assets/images/app_imdb.png', Icons.movie),
+      _QuickLink('9GAG', 'assets/icon/9gag.png', Icons.tag_faces),
+      _QuickLink('IMDb', 'assets/icon/imdb.png', Icons.movie),
       _QuickLink(
         'Share Chat',
-        'assets/images/app_sharechat.png',
+        'assets/icon/sharechat.png',
         Icons.share_outlined,
       ),
       _QuickLink(
         'Ted Talk',
-        'assets/images/app_ted.png',
+        'assets/icon/ted.png',
         Icons.record_voice_over_outlined,
       ),
-      _QuickLink(
-        'Linkedin',
-        'assets/images/app_linkedin.png',
-        Icons.work_outline,
-      ),
+      _QuickLink('Linkedin', 'assets/icon/linkedin.png', Icons.work_outline),
       _QuickLink(
         'Pinterest',
-        'assets/images/app_pinterest.png',
+        'assets/icon/pinterest.png',
         Icons.push_pin_outlined,
       ),
-      _QuickLink('DP Saver', 'assets/images/app_dp.png', Icons.person_outline),
-      _QuickLink('Help', 'assets/images/app_help.png', Icons.help_outline),
+      _QuickLink('DP Saver', 'assets/icon/dp.png', Icons.person_outline),
+      _QuickLink('Help', 'assets/icon/help.png', Icons.help_outline),
     ],
   ];
 
@@ -204,12 +193,11 @@ class _BrowserScreenState extends State<BrowserScreen> {
                                         l == 'dp saver') {
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
-                                          builder: (_) =>
-                                              UrlDownloadScreen(
-                                                platformLabel: link.label,
-                                                leadingIcon: link.fallbackIcon,
-                                                brandColor: _brandColorFor(l),
-                                              ),
+                                          builder: (_) => UrlDownloadScreen(
+                                            platformLabel: link.label,
+                                            leadingIcon: link.fallbackIcon,
+                                            brandColor: _brandColorFor(l),
+                                          ),
                                         ),
                                       );
                                     } else if (l == 'google' ||
@@ -361,19 +349,19 @@ class _StatusSaverCard extends StatelessWidget {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   Text(
-                    'Status Saver',
-                    style: TextStyle(
+                    tr('status.title'),
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 22,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
-                    'Save statuses automatically! Enjoy saving moments.',
-                    style: TextStyle(color: Colors.white),
+                    tr('status.subtitle'),
+                    style: const TextStyle(color: Colors.white),
                   ),
                 ],
               ),
@@ -447,9 +435,9 @@ class _RateUsCardState extends State<_RateUsCard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Text(
-            'Rate Video Downloader App',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+          Text(
+            tr('rate.title'),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 12),
           Row(
@@ -479,9 +467,9 @@ class _RateUsCardState extends State<_RateUsCard> {
                 ),
               ),
               onPressed: _openStore,
-              child: const Text(
-                'Rate Us',
-                style: TextStyle(fontWeight: FontWeight.w700),
+              child: Text(
+                tr('rate.button'),
+                style: const TextStyle(fontWeight: FontWeight.w700),
               ),
             ),
           ),
@@ -514,8 +502,8 @@ class _SearchBar extends StatelessWidget {
           Expanded(
             child: TextField(
               controller: controller,
-              decoration: const InputDecoration(
-                hintText: 'Search or type URL',
+              decoration: InputDecoration(
+                hintText: tr('search.hint'),
                 border: InputBorder.none,
               ),
               textInputAction: TextInputAction.search,
@@ -555,8 +543,9 @@ class _QuickTile extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            width: 58,
-            height: 58,
+            width: 45,
+            height: 45,
+            margin: EdgeInsets.all(6),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(14),
@@ -570,12 +559,15 @@ class _QuickTile extends StatelessWidget {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(14),
-              child: Image.asset(
-                link.asset,
-                fit: BoxFit.cover,
-                errorBuilder: (BuildContext _, Object __, StackTrace? ___) {
-                  return Icon(link.fallbackIcon, color: Colors.black54);
-                },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image.asset(
+                  link.asset,
+                  fit: BoxFit.cover,
+                  errorBuilder: (BuildContext _, Object __, StackTrace? ___) {
+                    return Icon(link.fallbackIcon, color: Colors.black54);
+                  },
+                ),
               ),
             ),
           ),

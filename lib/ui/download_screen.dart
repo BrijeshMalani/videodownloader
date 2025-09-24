@@ -10,9 +10,6 @@ class DownloadScreen extends StatefulWidget {
 class _DownloadScreenState extends State<DownloadScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Gallery Videos")),
-      body: SizedBox(),
-    );
+    return Scaffold(body: SizedBox());
   }
 }
