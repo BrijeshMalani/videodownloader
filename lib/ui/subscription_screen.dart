@@ -1,8 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:videodownloader/ui/home_screen.dart';
 
-class SubscriptionScreen extends StatelessWidget {
+import '../Utils/common.dart';
+
+class SubscriptionScreen extends StatefulWidget {
   const SubscriptionScreen({super.key});
+
+  @override
+  State<SubscriptionScreen> createState() => _SubscriptionScreenState();
+}
+
+class _SubscriptionScreenState extends State<SubscriptionScreen> {
+  InterstitialAd? _interstitialAd;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadInterstitialAd(Common.interstitial_ad_id);
+  }
+
+  void _loadInterstitialAd(String ads_id) {
+    InterstitialAd.load(
+      adUnitId: ads_id,
+      // Android test interstitial ad unit ID
+      request: AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (ad) => _interstitialAd = ad,
+        onAdFailedToLoad: (error) => _interstitialAd = null,
+      ),
+    );
+  }
+
+  void _showInterstitialAd(VoidCallback onAdClosed, String ads_id) {
+    if (_interstitialAd != null) {
+      // Prevent app open ad on the next resume caused by interstitial
+      // AppOpenAdManager.suppressNextOnResume();
+      _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+        onAdDismissedFullScreenContent: (ad) {
+          ad.dispose();
+          _loadInterstitialAd(ads_id);
+          onAdClosed();
+        },
+        onAdFailedToShowFullScreenContent: (ad, error) {
+          ad.dispose();
+          _loadInterstitialAd(ads_id);
+          onAdClosed();
+        },
+      );
+      _interstitialAd!.show();
+      _interstitialAd = null;
+    } else {
+      onAdClosed();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,9 +68,11 @@ class SubscriptionScreen extends StatelessWidget {
               children: [
                 IconButton(
                   onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => HomeScreen()),
-                    );
+                    _showInterstitialAd(() {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => HomeScreen()),
+                      );
+                    }, Common.interstitial_ad_id);
                   },
                   icon: Icon(Icons.close),
                   iconSize: 38,

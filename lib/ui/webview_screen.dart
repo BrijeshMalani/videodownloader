@@ -156,9 +156,27 @@ class _WebViewScreenState extends State<WebViewScreen> {
                         onSubmitted: (String value) {
                           final String v = value.trim();
                           if (v.isEmpty) return;
-                          final String toLoad = v.contains('://')
-                              ? v
-                              : 'https://' + v;
+                          String toLoad;
+                          // Try parse as URL
+                          try {
+                            final uri = Uri.parse(v);
+                            // Jo scheme (http/https) nathi pan lagyu ke URL j che (ex: google.com)
+                            if (!uri.hasScheme && v.contains('.')) {
+                              toLoad = 'https://$v';
+                            }
+                            // Jo valid http/https URL hoy
+                            else if (uri.hasScheme && (uri.scheme == 'http' || uri.scheme == 'https')) {
+                              toLoad = v;
+                            }
+                            // Nahi to Google search
+                            else {
+                              toLoad = 'https://www.google.com/search?q=${Uri.encodeComponent(v)}';
+                            }
+                          } catch (e) {
+                            // Parse fail → Google search
+                            toLoad = 'https://www.google.com/search?q=${Uri.encodeComponent(v)}';
+                          }
+
                           _tab.controller.loadRequest(Uri.parse(toLoad));
                         },
                       ),

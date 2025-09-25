@@ -1,12 +1,16 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:videodownloader/ui/url_download_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:videodownloader/ui/webview_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+
+import '../Utils/common.dart';
+import '../widgets/native_ad_widget.dart';
 
 class BrowserScreen extends StatefulWidget {
   const BrowserScreen({super.key});
@@ -16,6 +20,55 @@ class BrowserScreen extends StatefulWidget {
 }
 
 class _BrowserScreenState extends State<BrowserScreen> {
+  InterstitialAd? _interstitialAd;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadInterstitialAd(Common.interstitial_ad_id);
+  }
+
+  void _loadInterstitialAd(String ads_id) {
+    InterstitialAd.load(
+      adUnitId: ads_id,
+      // Android test interstitial ad unit ID
+      request: AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (ad) => _interstitialAd = ad,
+        onAdFailedToLoad: (error) => _interstitialAd = null,
+      ),
+    );
+  }
+
+  void _showInterstitialAd(VoidCallback onAdClosed, String ads_id) {
+    if (_interstitialAd != null) {
+      // Prevent app open ad on the next resume caused by interstitial
+      // AppOpenAdManager.suppressNextOnResume();
+      _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+        onAdDismissedFullScreenContent: (ad) {
+          ad.dispose();
+          _loadInterstitialAd(ads_id);
+          onAdClosed();
+        },
+        onAdFailedToShowFullScreenContent: (ad, error) {
+          ad.dispose();
+          _loadInterstitialAd(ads_id);
+          onAdClosed();
+        },
+      );
+      _interstitialAd!.show();
+      _interstitialAd = null;
+    } else {
+      onAdClosed();
+    }
+  }
+
+  @override
+  void dispose() {
+    _interstitialAd?.dispose();
+    super.dispose();
+  }
+
   final TextEditingController _searchController = TextEditingController();
   final PageController _pageController = PageController();
   int _pageIndex = 0;
@@ -132,11 +185,18 @@ class _BrowserScreenState extends State<BrowserScreen> {
               const SizedBox(height: 12),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: _SearchBar(
-                  controller: _searchController,
-                  onSubmit: (String value) {
-                    // TODO: open webview/search
+                child: InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => WebViewScreen(
+                          url: "https://www.google.com",
+                          title: "Search",
+                        ),
+                      ),
+                    );
                   },
+                  child: _SearchBar(),
                 ),
               ),
               const SizedBox(height: 16),
@@ -191,15 +251,29 @@ class _BrowserScreenState extends State<BrowserScreen> {
                                         l == 'twitter' ||
                                         l == 'url downloader' ||
                                         l == 'dp saver') {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (_) => UrlDownloadScreen(
-                                            platformLabel: link.label,
-                                            leadingIcon: link.fallbackIcon,
-                                            brandColor: _brandColorFor(l),
+                                      // if (count == 1) {
+                                      //   Navigator.of(context).push(
+                                      //     MaterialPageRoute(
+                                      //       builder: (_) => UrlDownloadScreen(
+                                      //         platformLabel: link.label,
+                                      //         leadingIcon: link.fallbackIcon,
+                                      //         brandColor: _brandColorFor(l),
+                                      //       ),
+                                      //     ),
+                                      //   );
+                                      // } else {
+                                      _showInterstitialAd(() {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (_) => UrlDownloadScreen(
+                                              platformLabel: link.label,
+                                              leadingIcon: link.fallbackIcon,
+                                              brandColor: _brandColorFor(l),
+                                            ),
                                           ),
-                                        ),
-                                      );
+                                        );
+                                      }, Common.interstitial_ad_id1);
+                                      // }
                                     } else if (l == 'google' ||
                                         l == 'vimeo' ||
                                         l == '9gag' ||
@@ -219,14 +293,26 @@ class _BrowserScreenState extends State<BrowserScreen> {
                                         'pinterest':
                                             'https://www.pinterest.com',
                                       };
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (_) => WebViewScreen(
-                                            url: urls[l]!,
-                                            title: link.label,
+                                      // count == 1
+                                      //     ? Navigator.of(context).push(
+                                      //         MaterialPageRoute(
+                                      //           builder: (_) => WebViewScreen(
+                                      //             url: urls[l]!,
+                                      //             title: link.label,
+                                      //           ),
+                                      //         ),
+                                      //       )
+                                      //     :
+                                      _showInterstitialAd(() {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (_) => WebViewScreen(
+                                              url: urls[l]!,
+                                              title: link.label,
+                                            ),
                                           ),
-                                        ),
-                                      );
+                                        );
+                                      }, Common.interstitial_ad_id1);
                                     }
                                   },
                                 );
@@ -248,6 +334,9 @@ class _BrowserScreenState extends State<BrowserScreen> {
                 ),
               ),
               const SizedBox(height: 16),
+              Common.native_ad_id.isNotEmpty
+                  ? NativeAdWidget()
+                  :SizedBox(),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: _StatusSaverCard(
@@ -480,11 +569,6 @@ class _RateUsCardState extends State<_RateUsCard> {
 }
 
 class _SearchBar extends StatelessWidget {
-  const _SearchBar({required this.controller, required this.onSubmit});
-
-  final TextEditingController controller;
-  final ValueChanged<String> onSubmit;
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -499,26 +583,13 @@ class _SearchBar extends StatelessWidget {
       child: Row(
         children: [
           const SizedBox(width: 16),
-          Expanded(
-            child: TextField(
-              controller: controller,
-              decoration: InputDecoration(
-                hintText: tr('search.hint'),
-                border: InputBorder.none,
-              ),
-              textInputAction: TextInputAction.search,
-              onSubmitted: onSubmit,
-            ),
-          ),
+          Expanded(child: Text(tr('search.hint'),style: TextStyle(color: Colors.black),)),
           const SizedBox(width: 8),
           Padding(
             padding: const EdgeInsets.only(right: 8),
             child: CircleAvatar(
               backgroundColor: Colors.redAccent,
-              child: IconButton(
-                icon: const Icon(Icons.search, color: Colors.white),
-                onPressed: () => onSubmit(controller.text),
-              ),
+              child: const Icon(Icons.search, color: Colors.white),
             ),
           ),
         ],

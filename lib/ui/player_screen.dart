@@ -2,10 +2,13 @@ import 'dart:io';
 import 'dart:math' as math;
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:videodownloader/ui/video_player_page.dart';
 import 'package:videodownloader/ui/audio_player_page.dart';
 import 'package:permission_handler/permission_handler.dart' as ph;
+
+import '../Utils/common.dart';
 
 class PlayerScreen extends StatefulWidget {
   const PlayerScreen({super.key});
@@ -352,24 +355,79 @@ class _VideoList extends StatelessWidget {
   }
 }
 
-class _VideoTile extends StatelessWidget {
+class _VideoTile extends StatefulWidget {
   const _VideoTile({required this.video});
 
   final AssetEntity video;
 
   @override
+  State<_VideoTile> createState() => _VideoTileState();
+}
+
+class _VideoTileState extends State<_VideoTile> {
+  InterstitialAd? _interstitialAd;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadInterstitialAd(Common.interstitial_ad_id);
+  }
+
+  void _loadInterstitialAd(String ads_id) {
+    InterstitialAd.load(
+      adUnitId: ads_id,
+      // Android test interstitial ad unit ID
+      request: AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (ad) => _interstitialAd = ad,
+        onAdFailedToLoad: (error) => _interstitialAd = null,
+      ),
+    );
+  }
+
+  void _showInterstitialAd(VoidCallback onAdClosed, String ads_id) {
+    if (_interstitialAd != null) {
+      // Prevent app open ad on the next resume caused by interstitial
+      // AppOpenAdManager.suppressNextOnResume();
+      _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+        onAdDismissedFullScreenContent: (ad) {
+          ad.dispose();
+          _loadInterstitialAd(ads_id);
+          onAdClosed();
+        },
+        onAdFailedToShowFullScreenContent: (ad, error) {
+          ad.dispose();
+          _loadInterstitialAd(ads_id);
+          onAdClosed();
+        },
+      );
+      _interstitialAd!.show();
+      _interstitialAd = null;
+    } else {
+      onAdClosed();
+    }
+  }
+
+  @override
+  void dispose() {
+    _interstitialAd?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder<Uint8List?>(
-      future: video.thumbnailDataWithSize(const ThumbnailSize(200, 200)),
+      future: widget.video.thumbnailDataWithSize(const ThumbnailSize(200, 200)),
       builder: (BuildContext context, AsyncSnapshot<Uint8List?> snapshot) {
         return InkWell(
           onTap: () async {
-            final File? f = await video.file;
+            final File? f = await widget.video.file;
             if (f != null && await f.exists()) {
-              // ignore: use_build_context_synchronously
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => VideoPlayerPage(file: f)),
-              );
+              _showInterstitialAd(() {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => VideoPlayerPage(file: f)),
+                );
+              }, Common.interstitial_ad_id1);
             }
           },
           child: Container(
@@ -410,14 +468,14 @@ class _VideoTile extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            video.title ?? 'Video',
+                            widget.video.title ?? 'Video',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(fontWeight: FontWeight.w700),
                           ),
                           const SizedBox(height: 4),
                           FutureBuilder<File?>(
-                            future: video.file,
+                            future: widget.video.file,
                             builder:
                                 (
                                   BuildContext context,
@@ -455,7 +513,7 @@ class _VideoTile extends StatelessWidget {
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(
-                      _duration(video.duration),
+                      _duration(widget.video.duration),
                       style: const TextStyle(color: Colors.white, fontSize: 12),
                     ),
                   ),
@@ -578,25 +636,80 @@ class _FolderSectionState extends State<_FolderSection> {
   }
 }
 
-class _AudioList extends StatelessWidget {
+class _AudioList extends StatefulWidget {
   const _AudioList({required this.audios});
 
   final List<AssetEntity> audios;
+
+  @override
+  State<_AudioList> createState() => _AudioListState();
+}
+
+class _AudioListState extends State<_AudioList> {
+  InterstitialAd? _interstitialAd;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadInterstitialAd(Common.interstitial_ad_id);
+  }
+
+  void _loadInterstitialAd(String ads_id) {
+    InterstitialAd.load(
+      adUnitId: ads_id,
+      // Android test interstitial ad unit ID
+      request: AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (ad) => _interstitialAd = ad,
+        onAdFailedToLoad: (error) => _interstitialAd = null,
+      ),
+    );
+  }
+
+  void _showInterstitialAd(VoidCallback onAdClosed, String ads_id) {
+    if (_interstitialAd != null) {
+      // Prevent app open ad on the next resume caused by interstitial
+      // AppOpenAdManager.suppressNextOnResume();
+      _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+        onAdDismissedFullScreenContent: (ad) {
+          ad.dispose();
+          _loadInterstitialAd(ads_id);
+          onAdClosed();
+        },
+        onAdFailedToShowFullScreenContent: (ad, error) {
+          ad.dispose();
+          _loadInterstitialAd(ads_id);
+          onAdClosed();
+        },
+      );
+      _interstitialAd!.show();
+      _interstitialAd = null;
+    } else {
+      onAdClosed();
+    }
+  }
+
+  @override
+  void dispose() {
+    _interstitialAd?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
       padding: const EdgeInsets.all(12),
       itemBuilder: (BuildContext context, int index) {
-        final AssetEntity a = audios[index];
+        final AssetEntity a = widget.audios[index];
         return InkWell(
           onTap: () async {
             final File? f = await a.file;
             if (f != null && await f.exists()) {
-              // ignore: use_build_context_synchronously
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => AudioPlayerPage(file: f)),
-              );
+              _showInterstitialAd(() {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => AudioPlayerPage(file: f)),
+                );
+              }, Common.interstitial_ad_id1);
             }
           },
           child: Container(
@@ -649,7 +762,7 @@ class _AudioList extends StatelessWidget {
         );
       },
       separatorBuilder: (_, __) => const SizedBox(height: 12),
-      itemCount: audios.length,
+      itemCount: widget.audios.length,
     );
   }
 
