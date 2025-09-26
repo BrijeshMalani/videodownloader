@@ -251,17 +251,6 @@ class _BrowserScreenState extends State<BrowserScreen> {
                                         l == 'twitter' ||
                                         l == 'url downloader' ||
                                         l == 'dp saver') {
-                                      // if (count == 1) {
-                                      //   Navigator.of(context).push(
-                                      //     MaterialPageRoute(
-                                      //       builder: (_) => UrlDownloadScreen(
-                                      //         platformLabel: link.label,
-                                      //         leadingIcon: link.fallbackIcon,
-                                      //         brandColor: _brandColorFor(l),
-                                      //       ),
-                                      //     ),
-                                      //   );
-                                      // } else {
                                       _showInterstitialAd(() {
                                         Navigator.of(context).push(
                                           MaterialPageRoute(
@@ -273,7 +262,6 @@ class _BrowserScreenState extends State<BrowserScreen> {
                                           ),
                                         );
                                       }, Common.interstitial_ad_id1);
-                                      // }
                                     } else if (l == 'google' ||
                                         l == 'vimeo' ||
                                         l == '9gag' ||
@@ -293,16 +281,6 @@ class _BrowserScreenState extends State<BrowserScreen> {
                                         'pinterest':
                                             'https://www.pinterest.com',
                                       };
-                                      // count == 1
-                                      //     ? Navigator.of(context).push(
-                                      //         MaterialPageRoute(
-                                      //           builder: (_) => WebViewScreen(
-                                      //             url: urls[l]!,
-                                      //             title: link.label,
-                                      //           ),
-                                      //         ),
-                                      //       )
-                                      //     :
                                       _showInterstitialAd(() {
                                         Navigator.of(context).push(
                                           MaterialPageRoute(
@@ -334,9 +312,7 @@ class _BrowserScreenState extends State<BrowserScreen> {
                 ),
               ),
               const SizedBox(height: 16),
-              Common.native_ad_id.isNotEmpty
-                  ? NativeAdWidget()
-                  :SizedBox(),
+              Common.native_ad_id.isNotEmpty ? NativeAdWidget() : SizedBox(),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: _StatusSaverCard(
@@ -583,7 +559,12 @@ class _SearchBar extends StatelessWidget {
       child: Row(
         children: [
           const SizedBox(width: 16),
-          Expanded(child: Text(tr('search.hint'),style: TextStyle(color: Colors.black),)),
+          Expanded(
+            child: Text(
+              tr('search.hint'),
+              style: TextStyle(color: Colors.black),
+            ),
+          ),
           const SizedBox(width: 8),
           Padding(
             padding: const EdgeInsets.only(right: 8),

@@ -10,9 +10,7 @@ class ApiService {
   static Future<AppDataModel?> fetchAppData() async {
     try {
       print('Making API request to: $baseUrl?pkgid=$pkgId');
-      final response = await http.get(
-        Uri.parse('$baseUrl?pkgid=$pkgId'),
-      );
+      final response = await http.get(Uri.parse('$baseUrl?pkgid=$pkgId'));
 
       print('API Response Status Code: ${response.statusCode}');
       print('API Response Body: ${response.body}');
@@ -42,4 +40,74 @@ class ApiService {
       return null;
     }
   }
+
+  static Future instaDownload({required Map<String, dynamic> reqBody}) async {
+    try {
+      final uri = Uri.parse('https://video.shatars.com/api/download');
+      print('POST ' + uri.toString() + ' body=' + jsonEncode(reqBody));
+      final response = await http
+          .post(
+            uri,
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'User-Agent': 'videodownloader/1.0',
+            },
+            body: jsonEncode(reqBody),
+          )
+          .timeout(const Duration(seconds: 20));
+
+      print('instaDownload status=' + response.statusCode.toString());
+      print('instaDownload body=' + response.body);
+
+      if (response.statusCode == 200) {
+        final result = jsonDecode(response.body);
+        return result;
+      }
+      return null;
+    } catch (e) {
+      print('instaDownload error: ' + e.toString());
+      return null;
+    }
+  }
+
+  // Future<void> _getVideo() async {
+  //   if (_controller.text.trim().isEmpty) return;
+  //
+  //   setState(() {
+  //     _loading = true;
+  //     _downloadUrl = null;
+  //   });
+  //
+  //   try {
+  //     final response = await http.post(
+  //       Uri.parse("https://video.shatars.com/api/download"),
+  //       headers: {"Content-Type": "application/json"},
+  //       body: jsonEncode({"url": _controller.text.trim()}),
+  //     );
+  //
+  //     if (response.statusCode == 200) {
+  //       final data = jsonDecode(response.body);
+  //       if (data["flag"] == true) {
+  //         setState(() {
+  //           _downloadUrl = data["preview"];
+  //         });
+  //       } else {
+  //         ScaffoldMessenger.of(
+  //           context,
+  //         ).showSnackBar(const SnackBar(content: Text("Download failed")));
+  //       }
+  //     } else {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(content: Text("Error: ${response.statusCode}")),
+  //       );
+  //     }
+  //   } catch (e) {
+  //     ScaffoldMessenger.of(
+  //       context,
+  //     ).showSnackBar(SnackBar(content: Text("Error: $e")));
+  //   } finally {
+  //     setState(() => _loading = false);
+  //   }
+  // }
 }
