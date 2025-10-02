@@ -99,17 +99,37 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused) {
+      // App is going to background
+      Common.isAppInBackground = true;
     } else if (state == AppLifecycleState.resumed) {
-      if (Common.addOnOff) {
+      // App is resuming from background
+      if (Common.addOnOff && Common.isAppInBackground) {
         if (!_recentlyShownInterstitial()) {
           _appOpenAdManager.showAdIfAvailable();
         }
       }
+      // Reset background flag after handling resume
+      Common.isAppInBackground = false;
     }
   }
 
   bool _recentlyShownInterstitial() {
-    return Common.recentlyOpened;
+    // Check if recently opened flag is true
+    if (Common.recentlyOpened) {
+      return true;
+    }
+
+    // Check if interstitial ad was shown within the last 15 seconds
+    if (Common.lastInterstitialAdTime != null) {
+      final timeSinceLastAd = DateTime.now().difference(
+        Common.lastInterstitialAdTime!,
+      );
+      if (timeSinceLastAd.inSeconds < 15) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   @override

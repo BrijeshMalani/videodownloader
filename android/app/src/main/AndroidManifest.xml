@@ -11,7 +11,7 @@
         android:maxSdkVersion="29" />
     <uses-permission
         android:name="android.permission.WRITE_INTERNAL_STORAGE"
-        android:maxSdkVersion="29" />F
+        android:maxSdkVersion="29" />
     <application
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"

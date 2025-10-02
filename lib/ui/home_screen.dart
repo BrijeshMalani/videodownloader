@@ -6,6 +6,7 @@ import 'package:videodownloader/ui/player_screen.dart';
 import 'package:videodownloader/ui/subscription_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 
+import '../widgets/WorkingNativeAdWidget.dart';
 import 'download_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -48,6 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       SizedBox(height: 15),
                       Container(color: Colors.red, height: 1),
+                      const WorkingNativeAdWidget(),
                     ],
                   ),
                   content: Text(

@@ -290,7 +290,6 @@ class _BrowserScreenState extends State<BrowserScreen> {
                 padding: EdgeInsets.symmetric(horizontal: 16),
                 child: _RateUsCard(),
               ),
-              Container(color: Colors.black, height: 2),
             ],
           ),
         ),

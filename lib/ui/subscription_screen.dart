@@ -209,12 +209,12 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                 padding: EdgeInsets.symmetric(vertical: 16),
                                 child: Row(
                                   children: [
-                                    Expanded(flex: 2, child: Container()),
+                                    Expanded(flex: 3, child: Container()),
                                     Expanded(
                                       child: Text(
                                         "FREE",
                                         style: TextStyle(
-                                          fontSize: 14,
+                                          fontSize: 12,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.black,
                                         ),
@@ -235,7 +235,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                         child: Text(
                                           "PREMIUM",
                                           style: TextStyle(
-                                            fontSize: 14,
+                                            fontSize: 12,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.red,
                                           ),
@@ -447,14 +447,14 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
             child: Text(
               title,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 13,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
             ),
           ),
           Container(
-            width: 70,
+            width: 65,
             child: Icon(
               freeEnabled ? Icons.check : Icons.remove,
               color: freeEnabled ? Colors.green : Colors.grey,
@@ -462,7 +462,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
             ),
           ),
           Container(
-            width: 70,
+            width: 65,
             child: Icon(
               premiumEnabled ? Icons.check : Icons.remove,
               color: premiumEnabled ? Colors.red : Colors.grey,

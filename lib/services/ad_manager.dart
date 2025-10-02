@@ -182,6 +182,8 @@ class AdManager {
         Common.interNumberShow = 1;
         Common.recentlyOpened = true;
         if (_isInterstitialAdLoaded && _interstitialAd != null) {
+          // Set timestamp when interstitial ad is about to be shown
+          Common.lastInterstitialAdTime = DateTime.now();
           _interstitialAd!.fullScreenContentCallback =
               FullScreenContentCallback(
                 onAdDismissedFullScreenContent: (InterstitialAd ad) {

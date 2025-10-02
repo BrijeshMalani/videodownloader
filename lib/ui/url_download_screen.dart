@@ -73,7 +73,7 @@ class _UrlDownloadScreenState extends State<UrlDownloadScreen> {
     try {
       // Create app-specific directory in external storage
       final appDir = Directory(
-        '/storage/emulated/0/Android/data/com.example.videodownloader/files/Downloads',
+        '/storage/emulated/0/Android/data/com.videodownload.downloader/files/Downloads',
       );
       if (!await appDir.exists()) {
         await appDir.create(recursive: true);
