@@ -1,0 +1,36 @@
+{
+  "common": {"yes": "Sí", "no": "No", "continue": "Continuar", "next": "Siguiente", "skip": "Saltar"},
+  "language": {"choose": "Elegir idioma"},
+  "settings": {
+    "title": "Ajustes",
+    "changeLanguage": "Cambiar idioma",
+    "howTo": "¿Cómo descargar?",
+    "feedback": "Opinión de la app",
+    "rateUs": "Califícanos",
+    "shareApp": "Compartir app",
+    "privacy": "Política de privacidad",
+    "terms": "Términos y condiciones",
+    "licence": "Licencia de la app"
+  },
+  "tabs": {"browse": "Explorar", "downloads": "Descargas", "player": "Reproductor"},
+  "header": {"downloader": "Descargador"},
+  "exit": {"title": "Salir de la app", "message": "¿Realmente quieres salir?"},
+  "rate": {"title": "Califica la app Video Downloader", "button": "Califícanos"},
+  "status": {"title": "Guardador de estados", "subtitle": "¡Guarda estados automáticamente!"},
+  "search": {"hint": "Buscar o escribir URL"},
+  "intro": {
+    "p1": {"title": "Descargas con un toque", "subtitle": "Guarda videos rápidamente con descargas privadas y seguras."},
+    "p2": {"title": "Velocidad 4X", "subtitle": "Descarga varios videos 4 veces más rápido sin interrupciones."},
+    "p3": {"title": "Servidor proxy privado", "subtitle": "Accede y descarga de forma segura desde cualquier lugar."},
+    "p4": {"title": "Reproductor Ultra HD", "subtitle": "Disfruta de reproducción 4K fluida."},
+    "p5": {"title": "Únete a más de 10 millones", "subtitle": "Descargas rápidas y fiables amadas por millones."}
+  },
+  "howto": {
+    "p1": {"title": "Ir al sitio web"},
+    "p2": {"title": "Reproducir el video"},
+    "p3": {"title": "Tocar el botón Descargar"},
+    "p4": {"title": ""},
+    "gotit": "Entendido"
+  }
+}
+

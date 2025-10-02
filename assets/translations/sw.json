@@ -1,0 +1,36 @@
+{
+  "common": {"yes": "Ndiyo", "no": "Hapana", "continue": "Endelea", "next": "Ifuatayo", "skip": "Ruka"},
+  "language": {"choose": "Chagua Lugha"},
+  "settings": {
+    "title": "Mipangilio",
+    "changeLanguage": "Badilisha Lugha",
+    "howTo": "Jinsi ya kupakua?",
+    "feedback": "Maoni ya Programu",
+    "rateUs": "Tutathmini",
+    "shareApp": "Shiriki Programu",
+    "privacy": "Sera ya Faragha",
+    "terms": "Vigezo na Masharti",
+    "licence": "Leseni ya Programu"
+  },
+  "tabs": {"browse": "Vinjari", "downloads": "Upakuaji", "player": "Kicheza"},
+  "header": {"downloader": "Kipakuzaji"},
+  "exit": {"title": "Toka kwenye programu", "message": "Kweli unataka kutoka?"},
+  "rate": {"title": "Kadiria Programu ya Video Downloader", "button": "Tukadirie"},
+  "status": {"title": "Hifadhi Hali", "subtitle": "Hifadhi hali kiotomatiki!"},
+  "search": {"hint": "Tafuta au andika URL"},
+  "intro": {
+    "p1": {"title": "Pakua kwa mguso mmoja", "subtitle": "Hifadhi video haraka kwa upakuaji salama na wa faraja."},
+    "p2": {"title": "Kasi mara 4 zaidi", "subtitle": "Pakua video nyingi mara 4 haraka bila kukatizwa."},
+    "p3": {"title": "Seva ya proxy binafsi", "subtitle": "Fikia na pakua kwa usalama kutoka popote."},
+    "p4": {"title": "Kicheza Ultra HD", "subtitle": "Furahia uchezaji wa 4K laini."},
+    "p5": {"title": "Jiunge na watumiaji 10M+", "subtitle": "Upakuaji wa haraka na wa kuaminika unaopendwa na mamilioni."}
+  },
+  "howto": {
+    "p1": {"title": "Nenda kwenye tovuti"},
+    "p2": {"title": "Chezesha video"},
+    "p3": {"title": "Bofya kitufe cha Pakua"},
+    "p4": {"title": ""},
+    "gotit": "Nimeelewa"
+  }
+}
+

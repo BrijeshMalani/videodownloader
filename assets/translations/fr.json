@@ -1,0 +1,36 @@
+{
+  "common": {"yes": "Oui", "no": "Non", "continue": "Continuer", "next": "Suivant", "skip": "Ignorer"},
+  "language": {"choose": "Choisir la langue"},
+  "settings": {
+    "title": "Paramètres",
+    "changeLanguage": "Changer de langue",
+    "howTo": "Comment télécharger ?",
+    "feedback": "Avis de l'application",
+    "rateUs": "Nous noter",
+    "shareApp": "Partager l'application",
+    "privacy": "Politique de confidentialité",
+    "terms": "Termes et conditions",
+    "licence": "Licence de l'application"
+  },
+  "tabs": {"browse": "Parcourir", "downloads": "Téléchargements", "player": "Lecteur"},
+  "header": {"downloader": "Téléchargeur"},
+  "exit": {"title": "Quitter l'application", "message": "Voulez-vous vraiment quitter ?"},
+  "rate": {"title": "Noter l'application Video Downloader", "button": "Nous noter"},
+  "status": {"title": "Sauvegarde de statut", "subtitle": "Enregistrez automatiquement les statuts !"},
+  "search": {"hint": "Rechercher ou saisir une URL"},
+  "intro": {
+    "p1": {"title": "Téléchargements en un clic", "subtitle": "Enregistrez rapidement des vidéos avec des téléchargements privés et sécurisés."},
+    "p2": {"title": "Vitesse 4X plus rapide", "subtitle": "Téléchargez plusieurs vidéos 4X plus vite sans interruption."},
+    "p3": {"title": "Serveur proxy privé", "subtitle": "Téléchargez en toute sécurité depuis n'importe où grâce à un proxy rapide."},
+    "p4": {"title": "Lecteur Ultra HD", "subtitle": "Profitez d'une lecture 4K fluide."},
+    "p5": {"title": "Rejoignez 10 millions+ d'utilisateurs", "subtitle": "Des téléchargements rapides et fiables, appréciés par des millions."}
+  },
+  "howto": {
+    "p1": {"title": "Aller au site Web"},
+    "p2": {"title": "Lancer la vidéo"},
+    "p3": {"title": "Appuyer sur le bouton Télécharger"},
+    "p4": {"title": ""},
+    "gotit": "Compris"
+  }
+}
+

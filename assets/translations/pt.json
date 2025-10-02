@@ -1,0 +1,36 @@
+{
+  "common": {"yes": "Sim", "no": "Não", "continue": "Continuar", "next": "Próximo", "skip": "Pular"},
+  "language": {"choose": "Escolher idioma"},
+  "settings": {
+    "title": "Configurações",
+    "changeLanguage": "Mudar idioma",
+    "howTo": "Como baixar?",
+    "feedback": "Feedback do app",
+    "rateUs": "Avalie-nos",
+    "shareApp": "Compartilhar app",
+    "privacy": "Política de privacidade",
+    "terms": "Termos e condições",
+    "licence": "Licença do app"
+  },
+  "tabs": {"browse": "Navegar", "downloads": "Downloads", "player": "Player"},
+  "header": {"downloader": "Downloader"},
+  "exit": {"title": "Sair do app", "message": "Deseja realmente sair?"},
+  "rate": {"title": "Avalie o aplicativo Video Downloader", "button": "Avalie-nos"},
+  "status": {"title": "Salvador de status", "subtitle": "Salve status automaticamente!"},
+  "search": {"hint": "Pesquise ou digite a URL"},
+  "intro": {
+    "p1": {"title": "Downloads com um toque", "subtitle": "Salve vídeos rapidamente com downloads privados e seguros."},
+    "p2": {"title": "Velocidade 4X", "subtitle": "Baixe vários vídeos 4X mais rápido sem interrupções."},
+    "p3": {"title": "Servidor proxy privado", "subtitle": "Acesse e baixe com segurança de qualquer lugar."},
+    "p4": {"title": "Player Ultra HD", "subtitle": "Aproveite a reprodução 4K suave."},
+    "p5": {"title": "Junte-se a 10 milhões+ de usuários", "subtitle": "Downloads rápidos e confiáveis amados por milhões."}
+  },
+  "howto": {
+    "p1": {"title": "Ir para o site"},
+    "p2": {"title": "Reproduzir o vídeo"},
+    "p3": {"title": "Toque no botão Baixar"},
+    "p4": {"title": ""},
+    "gotit": "Entendi"
+  }
+}
+

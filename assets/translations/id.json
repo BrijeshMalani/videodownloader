@@ -1,0 +1,36 @@
+{
+  "common": {"yes": "Ya", "no": "Tidak", "continue": "Lanjut", "next": "Berikutnya", "skip": "Lewati"},
+  "language": {"choose": "Pilih Bahasa"},
+  "settings": {
+    "title": "Pengaturan",
+    "changeLanguage": "Ganti Bahasa",
+    "howTo": "Cara Mengunduh?",
+    "feedback": "Masukan Aplikasi",
+    "rateUs": "Nilai Kami",
+    "shareApp": "Bagikan Aplikasi",
+    "privacy": "Kebijakan Privasi",
+    "terms": "Syarat & Ketentuan",
+    "licence": "Lisensi Aplikasi"
+  },
+  "tabs": {"browse": "Jelajah", "downloads": "Unduhan", "player": "Pemutar"},
+  "header": {"downloader": "Pengunduh"},
+  "exit": {"title": "Keluar Aplikasi", "message": "Anda yakin ingin keluar?"},
+  "rate": {"title": "Nilai Aplikasi Video Downloader", "button": "Nilai Kami"},
+  "status": {"title": "Penyimpan Status", "subtitle": "Simpan status otomatis!"},
+  "search": {"hint": "Cari atau ketik URL"},
+  "intro": {
+    "p1": {"title": "Unduh Satu Ketuk", "subtitle": "Simpan video dengan cepat dan aman hanya dalam beberapa langkah."},
+    "p2": {"title": "Kecepatan 4X Lebih Cepat", "subtitle": "Unduh banyak video 4X lebih cepat tanpa gangguan."},
+    "p3": {"title": "Server Proxy Pribadi", "subtitle": "Akses dan unduh dengan aman dari mana saja."},
+    "p4": {"title": "Pemutar Ultra HD", "subtitle": "Nikmati pemutaran 4K yang mulus."},
+    "p5": {"title": "Bergabung dengan 10 Juta+ Pengguna", "subtitle": "Unduhan cepat dan andal yang disukai jutaan orang."}
+  },
+  "howto": {
+    "p1": {"title": "Buka Situs Web"},
+    "p2": {"title": "Putar Videonya"},
+    "p3": {"title": "Ketuk tombol Unduh"},
+    "p4": {"title": ""},
+    "gotit": "Mengerti"
+  }
+}
+
