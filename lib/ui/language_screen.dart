@@ -3,10 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:videodownloader/Utils/common.dart';
 
 import '../services/ad_manager.dart';
-<<<<<<< HEAD
 import '../widgets/WorkingNativeAdWidget.dart';
-=======
->>>>>>> origin/master
 import 'home_screen.dart';
 
 class LanguageScreen extends StatefulWidget {
@@ -17,10 +14,7 @@ class LanguageScreen extends StatefulWidget {
 }
 
 class _LanguageScreenState extends State<LanguageScreen> {
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/master
   final List<_LanguageItem> _languages = const [
     _LanguageItem(label: 'English', code: 'en', color: Color(0xFFE9F6EA)),
     _LanguageItem(label: 'Français', code: 'fr', color: Color(0xFFE8F0FF)),
@@ -57,19 +51,11 @@ class _LanguageScreenState extends State<LanguageScreen> {
                   Navigator.of(context).pushNamed('/subscribe');
               } else {
                 if (context.mounted)
-<<<<<<< HEAD
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (context) => HomeScreen()),
                     (Route<dynamic> route) => false,
                   );
-=======
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomeScreen()),
-                      (Route<dynamic> route) => false,
-                    );
->>>>>>> origin/master
               }
             },
           ),

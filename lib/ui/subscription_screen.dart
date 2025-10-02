@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
 import 'package:flutter/services.dart';
 import 'package:videodownloader/ui/home_screen.dart';
 import '../services/ad_manager.dart';
 import '../services/subscription_manager.dart';
-=======
-import 'package:videodownloader/ui/home_screen.dart';
-import '../services/ad_manager.dart';
->>>>>>> origin/master
 
 class SubscriptionScreen extends StatefulWidget {
   const SubscriptionScreen({super.key});
@@ -17,7 +12,6 @@ class SubscriptionScreen extends StatefulWidget {
 }
 
 class _SubscriptionScreenState extends State<SubscriptionScreen> {
-<<<<<<< HEAD
   bool _isLoading = false;
   bool _isPriceLoading = true;
   String _priceText = "Loading...";
@@ -93,12 +87,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     }
   }
 
-=======
->>>>>>> origin/master
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-<<<<<<< HEAD
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
@@ -382,54 +373,6 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                         SizedBox(height: 8),
                       ],
                     ),
-=======
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    AdManager().showInterstitialAd();
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => HomeScreen()),
-                    );
-                  },
-                  icon: Icon(Icons.close),
-                  iconSize: 38,
-                  color: Colors.black,
-                ),
-              ],
-            ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: Image.asset(
-                'assets/images/subscribe.jpeg',
-                fit: BoxFit.cover,
-              ),
-            ),
-            SizedBox(height: 10),
-            Text(
-              "No Payment Required Now",
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 25,
-              ),
-            ),
-            SizedBox(height: 10),
-            SizedBox(
-              width: 300,
-              height: 50,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.redAccent,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
->>>>>>> origin/master
                   ),
                   // Terms and Conditions
                   Padding(

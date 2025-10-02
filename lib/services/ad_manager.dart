@@ -3,30 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 import '../Utils/common.dart';
-<<<<<<< HEAD
 import 'subscription_manager.dart';
-=======
->>>>>>> origin/master
 
 class AdManager {
   static final AdManager _instance = AdManager._internal();
+
   factory AdManager() => _instance;
+
   AdManager._internal();
 
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/master
   InterstitialAd? _interstitialAd;
   NativeAd? _nativeAd;
   BannerAd? _bannerAd;
   AppOpenAd? _appOpenAd;
   bool _isInterstitialAdLoaded = false;
-<<<<<<< HEAD
   bool _isNativeAdLoaded = false; // Unused
-=======
-  bool _isNativeAdLoaded = false;
->>>>>>> origin/master
   bool _isBannerAdLoaded = false;
   bool _isAppOpenAdLoaded = false;
   int _retryAttempt = 0;
@@ -68,13 +59,7 @@ class AdManager {
       request: const AdRequest(),
       nativeAdOptions: NativeAdOptions(
         mediaAspectRatio: MediaAspectRatio.landscape,
-<<<<<<< HEAD
         videoOptions: VideoOptions(startMuted: true),
-=======
-        videoOptions: VideoOptions(
-          startMuted: true,
-        ),
->>>>>>> origin/master
       ),
       nativeTemplateStyle: NativeTemplateStyle(
         templateType: TemplateType.medium,
@@ -128,15 +113,8 @@ class AdManager {
     if (_bannerAd != null) {
       _bannerAd!.dispose();
     }
-<<<<<<< HEAD
-
     _bannerAd = BannerAd(
       adUnitId: Common.bannar_ad_id,
-=======
-    
-    _bannerAd = BannerAd(
-      adUnitId: Common.bannar_ad_id ,
->>>>>>> origin/master
       size: AdSize.banner,
       request: const AdRequest(),
       listener: BannerAdListener(
@@ -193,7 +171,6 @@ class AdManager {
   }
 
   void showInterstitialAd() {
-<<<<<<< HEAD
     // Check if user has active subscription
     if (SubscriptionManager().isSubscribed) {
       print("User has active subscription, skipping interstitial ad");
@@ -224,32 +201,6 @@ class AdManager {
           _interstitialAd!.show();
         }
       } else {
-=======
-
-    if(Common.addOnOff){
-      if(Common.ads_int_open_count == Common.interNumberShow){
-        Common.interNumberShow = 1;
-        Common.recentlyOpened = true;
-        if (_isInterstitialAdLoaded && _interstitialAd != null) {
-          _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
-            onAdDismissedFullScreenContent: (InterstitialAd ad) {
-              ad.dispose();
-              Common.recentlyOpened = false;
-              _isInterstitialAdLoaded = false;
-              _loadInterstitialAd();
-            },
-            onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
-              ad.dispose();
-              _isInterstitialAdLoaded = false;
-              Common.recentlyOpened = false;
-              _loadInterstitialAd();
-            },
-          );
-          _interstitialAd!.show();
-        }
-
-      }else{
->>>>>>> origin/master
         Common.recentlyOpened = false;
         Common.interNumberShow++;
       }
@@ -262,7 +213,6 @@ class AdManager {
       return;
     }
 
-<<<<<<< HEAD
     // Check if user has active subscription
     if (SubscriptionManager().isSubscribed) {
       print("User has active subscription, skipping app open ad");
@@ -270,8 +220,6 @@ class AdManager {
       return;
     }
 
-=======
->>>>>>> origin/master
     if (_isAppOpenAdLoaded && _appOpenAd != null) {
       print("Showing App Open Ad");
       _onAdClosed = onAdClosed;
@@ -318,14 +266,11 @@ class AdManager {
   // }
 
   Widget getBannerAd() {
-<<<<<<< HEAD
     // Check if user has active subscription
     if (SubscriptionManager().isSubscribed) {
       return const SizedBox.shrink();
     }
 
-=======
->>>>>>> origin/master
     if (!_isBannerAdLoaded || _bannerAd == null) {
       return const SizedBox.shrink();
     }
@@ -344,8 +289,4 @@ class AdManager {
     _bannerAd?.dispose();
     _appOpenAd?.dispose();
   }
-<<<<<<< HEAD
 }
-=======
-} 
->>>>>>> origin/master

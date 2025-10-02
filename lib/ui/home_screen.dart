@@ -218,13 +218,7 @@ class _BottomItem extends StatelessWidget {
             const SizedBox(height: 2),
             Text(
               label,
-<<<<<<< HEAD
               style: TextStyle(color: iconColor, fontWeight: FontWeight.bold),
-=======
-              style: TextStyle(
-                color: Colors.black,
-              ),
->>>>>>> origin/master
             ),
           ],
         ),

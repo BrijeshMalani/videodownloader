@@ -5,11 +5,8 @@ import 'package:videodownloader/Utils/common.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 import '../services/ad_manager.dart';
-<<<<<<< HEAD
 import '../services/subscription_manager.dart';
 import '../widgets/WorkingNativeAdWidget.dart';
-=======
->>>>>>> origin/master
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({super.key});

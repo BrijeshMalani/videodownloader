@@ -2,12 +2,8 @@ import 'dart:io';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:videodownloader/ui/video_player_page.dart';
-<<<<<<< HEAD
-
 import '../services/ad_manager.dart';
 import '../widgets/WorkingNativeAdWidget.dart';
-=======
->>>>>>> origin/master
 
 class DownloadScreen extends StatefulWidget {
   const DownloadScreen({super.key});
@@ -105,10 +101,7 @@ class _DownloadScreenState extends State<DownloadScreen> {
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         elevation: 0,
-<<<<<<< HEAD
         automaticallyImplyLeading: false,
-=======
->>>>>>> origin/master
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
@@ -117,7 +110,6 @@ class _DownloadScreenState extends State<DownloadScreen> {
           ),
         ],
       ),
-<<<<<<< HEAD
       body: Container(
         child: Column(
           children: [
@@ -202,78 +194,6 @@ class _DownloadScreenState extends State<DownloadScreen> {
       //   child: const Icon(Icons.refresh, color: Colors.white),
       //   tooltip: 'Refresh Downloads',
       // ),
-=======
-      body: _loading
-          ? const Center(child: CircularProgressIndicator())
-          : _errorMessage != null
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.error_outline, size: 64, color: Colors.red[300]),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Error loading videos',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.red[700],
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    _errorMessage!,
-                    style: TextStyle(color: Colors.red[600]),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: _loadDownloadedVideos,
-                    child: const Text('Retry'),
-                  ),
-                ],
-              ),
-            )
-          : _downloadedVideos.isEmpty
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.video_library_outlined,
-                    size: 64,
-                    color: Colors.grey[400],
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'No downloaded videos found',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Download some videos to see them here',
-                    style: TextStyle(color: Colors.grey[500]),
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: _loadDownloadedVideos,
-                    child: const Text('Refresh'),
-                  ),
-                ],
-              ),
-            )
-          : _DownloadedVideoList(videos: _downloadedVideos),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _loadDownloadedVideos,
-        backgroundColor: Colors.blue,
-        child: const Icon(Icons.refresh, color: Colors.white),
-        tooltip: 'Refresh Downloads',
-      ),
->>>>>>> origin/master
     );
   }
 }
@@ -305,34 +225,15 @@ class _DownloadedVideoTile extends StatefulWidget {
 }
 
 class _DownloadedVideoTileState extends State<_DownloadedVideoTile> {
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/master
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
         if (await widget.video.exists()) {
-<<<<<<< HEAD
           AdManager().showInterstitialAd();
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => VideoPlayerPage(file: widget.video),
-            ),
-          );
-=======
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => VideoPlayerPage(file: widget.video),
-              ),
-            );
->>>>>>> origin/master
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Video file not found"),
-              backgroundColor: Colors.red,
             ),
           );
         }

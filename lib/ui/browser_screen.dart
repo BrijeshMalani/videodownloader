@@ -7,14 +7,10 @@ import 'package:videodownloader/ui/webview_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-<<<<<<< HEAD
 import '../services/ad_manager.dart';
+import '../widgets/SmallNativeAdService.dart';
 import '../widgets/WorkingNativeAdWidget.dart';
 import 'how_to_download.dart';
-=======
-import '../Utils/common.dart';
-import '../widgets/SmallNativeAdService.dart';
->>>>>>> origin/master
 
 class BrowserScreen extends StatefulWidget {
   const BrowserScreen({super.key});
@@ -24,10 +20,6 @@ class BrowserScreen extends StatefulWidget {
 }
 
 class _BrowserScreenState extends State<BrowserScreen> {
-<<<<<<< HEAD
-=======
-  final TextEditingController _searchController = TextEditingController();
->>>>>>> origin/master
   final PageController _pageController = PageController();
   int _pageIndex = 0;
 
@@ -227,10 +219,7 @@ class _BrowserScreenState extends State<BrowserScreen> {
                                         l == 'twitter' ||
                                         l == 'youtube' ||
                                         l == 'dp saver') {
-<<<<<<< HEAD
                                       AdManager().showInterstitialAd();
-=======
->>>>>>> origin/master
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
                                           builder: (_) => UrlDownloadScreen(
@@ -259,10 +248,7 @@ class _BrowserScreenState extends State<BrowserScreen> {
                                         'pinterest':
                                             'https://www.pinterest.com',
                                       };
-<<<<<<< HEAD
                                       AdManager().showInterstitialAd();
-=======
->>>>>>> origin/master
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
                                           builder: (_) => WebViewScreen(
@@ -271,15 +257,12 @@ class _BrowserScreenState extends State<BrowserScreen> {
                                           ),
                                         ),
                                       );
-<<<<<<< HEAD
                                     } else if (l == "help") {
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
                                           builder: (context) => HowToDownload(),
                                         ),
                                       );
-=======
->>>>>>> origin/master
                                     }
                                   },
                                 );
@@ -301,62 +284,7 @@ class _BrowserScreenState extends State<BrowserScreen> {
                 ),
               ),
               const SizedBox(height: 8),
-<<<<<<< HEAD
               const WorkingNativeAdWidget(),
-=======
-              nativeAd != null
-                  ? Container(
-                      height: 110,
-                      margin: const EdgeInsets.all(10),
-                      child: AdWidget(ad: nativeAd),
-                    )
-                  : Container(
-                      height: 110,
-                      margin: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[100],
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: Colors.grey[300]!),
-                      ),
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              Icons.ads_click,
-                              color: Colors.grey[400],
-                              size: 28,
-                            ),
-                            const SizedBox(height: 6),
-                            Text(
-                              'Ad Loading...',
-                              style: TextStyle(
-                                color: Colors.grey[600],
-                                fontSize: 12,
-                              ),
-                            ),
-                            const SizedBox(height: 2),
-                            TextButton(
-                              onPressed: _loadNativeAd,
-                              style: TextButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 4,
-                                ),
-                                minimumSize: Size.zero,
-                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              ),
-                              child: const Text(
-                                'Refresh',
-                                style: TextStyle(fontSize: 10),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
->>>>>>> origin/master
               const SizedBox(height: 8),
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16),
@@ -501,7 +429,7 @@ class _SearchBar extends StatelessWidget {
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.grey,
-                fontSize: 16
+                fontSize: 16,
               ),
             ),
           ),
@@ -568,7 +496,10 @@ class _QuickTile extends StatelessWidget {
             link.label,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black.withOpacity(0.6)),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.black.withOpacity(0.6),
+            ),
           ),
         ],
       ),

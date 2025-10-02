@@ -24,11 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     setupRemoteConfig();
-<<<<<<< HEAD
     Future.delayed(const Duration(seconds: 5), () {
-=======
-    Future.delayed(const Duration(seconds: 3), () {
->>>>>>> origin/master
       _checkFirstSeen();
     });
     super.initState();
@@ -72,7 +68,6 @@ class _SplashScreenState extends State<SplashScreen> {
       if (data.admobId.isNotEmpty) {
         print('Setting banner ad ID: ${data.admobId}');
         Common.bannar_ad_id = data.admobId;
-<<<<<<< HEAD
         // Common.bannar_ad_id = "ca-app-pub-3940256099942544/6300978111";
       }
       if (data.admobFull.isNotEmpty) {
@@ -84,18 +79,6 @@ class _SplashScreenState extends State<SplashScreen> {
         print('Setting interstitial ad ID1: ${data.admobFull1}');
         Common.interstitial_ad_id1 = data.admobFull1;
         // Common.interstitial_ad_id1 = "ca-app-pub-3940256099942544/1033173712";
-=======
-        Common.bannar_ad_id = "ca-app-pub-3940256099942544/6300978111";
-      }
-      if (data.admobFull.isNotEmpty) {
-        print('Setting interstitial ad ID: ${data.admobFull}');
-        // Common.interstitial_ad_id = data.admobFull;
-        Common.interstitial_ad_id = "ca-app-pub-3940256099942544/1033173712";
-      }
-      if (data.admobFull1.isNotEmpty) {
-        // print('Setting interstitial ad ID1: ${data.admobFull1}');
-        Common.interstitial_ad_id1 = "ca-app-pub-3940256099942544/1033173712";
->>>>>>> origin/master
       }
       if (data.admobFull2.isNotEmpty) {
         print('Setting interstitial ad ID2: ${data.admobFull2}');
@@ -103,7 +86,6 @@ class _SplashScreenState extends State<SplashScreen> {
       }
       if (data.admobNative.isNotEmpty) {
         print('Setting native ad ID: ${data.admobNative}');
-<<<<<<< HEAD
         Common.native_ad_id = data.admobNative;
         // Common.native_ad_id = "ca-app-pub-3940256099942544/2247696110";
       }
@@ -111,15 +93,6 @@ class _SplashScreenState extends State<SplashScreen> {
         print('Setting app open ad ID: ${data.rewardedInt}');
         Common.app_open_ad_id = data.rewardedInt;
         // Common.app_open_ad_id = "ca-app-pub-3940256099942544/9257395921";
-=======
-        // Common.native_ad_id = data.admobNative;
-        Common.native_ad_id = "ca-app-pub-3940256099942544/2247696110";
-      }
-      if (data.rewardedInt.isNotEmpty) {
-        print('Setting app open ad ID: ${data.rewardedInt}');
-        // Common.app_open_ad_id = data.rewardedInt;
-        Common.app_open_ad_id = "ca-app-pub-3940256099942544/9257395921";
->>>>>>> origin/master
       }
     }
 
@@ -129,13 +102,8 @@ class _SplashScreenState extends State<SplashScreen> {
     Common.addOnOff = true;
 
     if (Common.addOnOff) {
-<<<<<<< HEAD
       // Initialize only the necessary ad services
       AdManager().initialize();
-=======
-      AdManager().initialize();
-
->>>>>>> origin/master
       SmallNativeAdService().initialize();
       NativeAdService().initialize();
       _appOpenAdManager.loadAd();

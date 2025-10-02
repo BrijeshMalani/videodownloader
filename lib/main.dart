@@ -8,10 +8,7 @@ import 'package:videodownloader/ui/language_screen.dart';
 import 'package:videodownloader/ui/subscription_screen.dart';
 import 'package:videodownloader/ui/home_screen.dart';
 import 'package:videodownloader/widgets/SmallNativeAdService.dart';
-<<<<<<< HEAD
 import 'package:videodownloader/services/subscription_manager.dart';
-=======
->>>>>>> origin/master
 import 'Utils/common.dart';
 
 Future<void> main() async {
@@ -55,13 +52,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
     // Initialize native ad service
     SmallNativeAdService().initialize();
-
-<<<<<<< HEAD
     // Initialize subscription manager
     SubscriptionManager().initialize();
 
-=======
->>>>>>> origin/master
     ///Initialize images and precache it
     SchedulerBinding.instance.addPostFrameCallback((_) {
       Future.wait([

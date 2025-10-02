@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:videodownloader/Utils/common.dart';
-<<<<<<< HEAD
 import '../services/subscription_manager.dart';
-=======
->>>>>>> origin/master
 
 class SmallNativeAdService {
   static final SmallNativeAdService _instance =
@@ -14,16 +11,12 @@ class SmallNativeAdService {
 
   NativeAd? _nativeAd;
   bool _isAdLoaded = false;
-<<<<<<< HEAD
   bool _isLoading = false;
   bool _isInitialized = false;
-=======
->>>>>>> origin/master
 
   SmallNativeAdService._internal();
 
   void initialize() {
-<<<<<<< HEAD
     if (_isInitialized) {
       debugPrint('SmallNativeAdService already initialized');
       return;
@@ -67,23 +60,10 @@ class SmallNativeAdService {
             'MobileAds initialization failed for SmallNativeAdService: $error',
           );
           _isInitialized = false;
-=======
-    MobileAds.instance
-        .initialize()
-        .then((_) {
-          debugPrint('MobileAds initialized');
-          if (Common.addOnOff) {
-            _loadAd();
-          }
-        })
-        .catchError((error) {
-          debugPrint('MobileAds initialization failed: $error');
->>>>>>> origin/master
         });
   }
 
   void _loadAd() {
-<<<<<<< HEAD
     if (!_isInitialized) {
       debugPrint('MobileAds not initialized yet');
       return;
@@ -94,14 +74,11 @@ class SmallNativeAdService {
       return;
     }
 
-=======
->>>>>>> origin/master
     if (Common.native_ad_id.isEmpty) {
       debugPrint('Native ad ID is empty, skipping ad load');
       return;
     }
 
-<<<<<<< HEAD
     if (!Common.addOnOff) {
       debugPrint('Ads are disabled');
       return;
@@ -222,71 +199,6 @@ class SmallNativeAdService {
       return null;
     }
 
-=======
-    _nativeAd = NativeAd(
-      adUnitId: Common.native_ad_id,
-      request: const AdRequest(),
-      nativeAdOptions: NativeAdOptions(
-        mediaAspectRatio: MediaAspectRatio.landscape,
-        videoOptions: VideoOptions(startMuted: true),
-      ),
-      nativeTemplateStyle: NativeTemplateStyle(
-        templateType: TemplateType.small,
-        mainBackgroundColor: Colors.white,
-        cornerRadius: 10.0,
-        callToActionTextStyle: NativeTemplateTextStyle(
-          textColor: Colors.white,
-          backgroundColor: Colors.blue,
-          style: NativeTemplateFontStyle.monospace,
-          size: 16.0,
-        ),
-        primaryTextStyle: NativeTemplateTextStyle(
-          textColor: Colors.black,
-          backgroundColor: Colors.white,
-          style: NativeTemplateFontStyle.normal,
-          size: 16.0,
-        ),
-        secondaryTextStyle: NativeTemplateTextStyle(
-          textColor: Colors.grey,
-          backgroundColor: Colors.white,
-          style: NativeTemplateFontStyle.normal,
-          size: 14.0,
-        ),
-        tertiaryTextStyle: NativeTemplateTextStyle(
-          textColor: Colors.grey,
-          backgroundColor: Colors.white,
-          style: NativeTemplateFontStyle.normal,
-          size: 12.0,
-        ),
-      ),
-      listener: NativeAdListener(
-        onAdLoaded: (ad) {
-          _isAdLoaded = true;
-          debugPrint('NativeAd loaded successfully');
-        },
-        onAdFailedToLoad: (ad, error) {
-          debugPrint('SmallNativeAd failed to load: $error');
-          _isAdLoaded = false;
-          ad.dispose();
-          // Don't retry immediately to avoid infinite loops
-          Future.delayed(const Duration(seconds: 5), () {
-            if (Common.addOnOff && Common.native_ad_id.isNotEmpty) {
-              _loadAd();
-            }
-          });
-        },
-        onAdOpened: (ad) {
-          debugPrint('NativeAd opened');
-        },
-        onAdClosed: (ad) {
-          debugPrint('NativeAd closed');
-        },
-      ),
-    )..load();
-  }
-
-  NativeAd? getAd() {
->>>>>>> origin/master
     if (!Common.addOnOff) {
       debugPrint('Ads are disabled');
       return null;
@@ -297,7 +209,6 @@ class SmallNativeAdService {
       return null;
     }
 
-<<<<<<< HEAD
     if (!_isInitialized) {
       debugPrint('MobileAds not initialized');
       return null;
@@ -306,18 +217,12 @@ class SmallNativeAdService {
     if (_nativeAd != null && _isAdLoaded) {
       final adToReturn = _nativeAd;
       debugPrint("Returning loaded native ad");
-=======
-    if (_nativeAd != null && _isAdLoaded) {
-      final adToReturn = _nativeAd;
-      debugPrint("Returning loaded native ad: $_nativeAd");
->>>>>>> origin/master
 
       // Reset for next ad
       _nativeAd = null;
       _isAdLoaded = false;
 
       // Load next ad in background
-<<<<<<< HEAD
       Future.delayed(const Duration(milliseconds: 500), () {
         _loadAd();
       });
@@ -330,20 +235,11 @@ class SmallNativeAdService {
       if (!_isLoading) {
         _loadAd();
       }
-=======
-      _loadAd();
-
-      return adToReturn;
-    } else {
-      debugPrint('No ad available, loading new ad...');
-      _loadAd();
->>>>>>> origin/master
       return null;
     }
   }
 
   bool get isAdReady => _isAdLoaded;
-<<<<<<< HEAD
 
   bool get isInitialized => _isInitialized;
 
@@ -366,6 +262,4 @@ class SmallNativeAdService {
     _isAdLoaded = false;
     _isLoading = false;
   }
-=======
->>>>>>> origin/master
 }

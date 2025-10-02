@@ -373,10 +373,6 @@ class _VideoTile extends StatefulWidget {
 }
 
 class _VideoTileState extends State<_VideoTile> {
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/master
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Uint8List?>(
@@ -386,16 +382,10 @@ class _VideoTileState extends State<_VideoTile> {
           onTap: () async {
             final File? f = await widget.video.file;
             if (f != null && await f.exists()) {
-<<<<<<< HEAD
               AdManager().showInterstitialAd();
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (_) => VideoPlayerPage(file: f)),
               );
-=======
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => VideoPlayerPage(file: f)),
-                );
->>>>>>> origin/master
             }
           },
           child: Container(
@@ -614,7 +604,6 @@ class _AudioList extends StatefulWidget {
 }
 
 class _AudioListState extends State<_AudioList> {
-<<<<<<< HEAD
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -632,58 +621,6 @@ class _AudioListState extends State<_AudioList> {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) => AudioPlayerPage(file: f),
-=======
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.separated(
-      padding: const EdgeInsets.all(12),
-      itemBuilder: (BuildContext context, int index) {
-        final AssetEntity a = widget.audios[index];
-        return InkWell(
-          onTap: () async {
-            final File? f = await a.file;
-            if (f != null && await f.exists()) {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => AudioPlayerPage(file: f)),
-                );
-            }
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(18),
-              boxShadow: const [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 8,
-                  offset: Offset(0, 2),
-                ),
-              ],
-            ),
-            padding: const EdgeInsets.all(10),
-            child: Row(
-              children: [
-                Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    color: Colors.black12,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Icon(Icons.music_note, color: Colors.black45),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        a.title ?? 'Audio',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontWeight: FontWeight.w700),
->>>>>>> origin/master
                       ),
                     );
                   }
